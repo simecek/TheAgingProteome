@@ -7,10 +7,10 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: about.html
-    - text: "License"
-      href: license.html
+    - text: "Data"
+      href: http://github.com/simecek/TheAgingProteome/tree/master/data
+    - text: "Processed data"
+      href: https://github.com/simecek/TheAgingProteome/tree/master/output
   right:
     - icon: fa-github
       href: https://github.com/simecek/TheAgingProteome
