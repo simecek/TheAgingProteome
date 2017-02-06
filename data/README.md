@@ -1,6 +1,6 @@
 # Data
 
-RNA and Protein expression collected from  [Diversity Outbred](https://www.jax.org/strain/009376) mice distributed as `.RData` file. 
+RNA and Protein expression data collected from  [Diversity Outbred](https://www.jax.org/strain/009376) mice and distributed as `.RData` files. 
 
  1) Kidney: [DO188b_kidney_noprobs.RData](https://www.dropbox.com/s/67mhez9xqfmsjww/DO188b_kidney_noprobs.RData?dl=0)
  

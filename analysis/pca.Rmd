@@ -1,0 +1,57 @@
+---
+title: "PCA plots"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+
+## Kidney mRNA-level PCA
+
+```{r kidney_mrna, echo=FALSE}
+suppressPackageStartupMessages(library(ggplot2))
+dt <- read.csv("../../kidney2/kidney_pca_predict.csv", as.is=TRUE)
+ggplot(dt, aes(x=PC1_mrna, y=PC2_mrna, shape=Sex, color=factor(Age))) +   geom_point(size=I(3)) + 
+  ggtitle("Kidney mRNA: PCA1 vs. PCA2") +
+  theme_bw()
+```
+
+## Kidney protein-level PCA
+
+```{r kidney_protein, echo=FALSE}
+ggplot(dt, aes(x=PC1_prot, y=PC2_prot, shape=Sex, color=factor(Age))) +   geom_point(size=I(3)) + 
+  ggtitle("Kidney mRNA: PCA1 vs. PCA2") +
+  theme_bw()
+```
+
+## Heart mRNA-level PCA
+
+```{r heart_mrna, echo=FALSE}
+dt <- read.csv("../../heart2/heart_pca_predict.csv", as.is=TRUE)
+ggplot(dt, aes(x=PC1_mrna, y=PC2_mrna, shape=Sex, color=factor(Age))) +   geom_point(size=I(3)) + 
+  ggtitle("Heart mRNA: PCA1 vs. PCA2") +
+  theme_bw()
+```
+
+## Heart protein-level PCA
+
+```{r heart_protein, echo=FALSE}
+ggplot(dt, aes(x=PC1_prot, y=PC2_prot, shape=Sex, color=factor(Age))) +   geom_point(size=I(3)) + 
+  ggtitle("Heart mRNA: PCA1 vs. PCA2") +
+  theme_bw()
+```
+
+## Session Information
+
+```{r session-info}
+```
