@@ -5,13 +5,14 @@ output:
     toc: false
 ---
 
-### Analyses:
+Unpublished analysis of aging [Diversity Outbred](https://www.jax.org/strain/009376) (mouse) kidney/heart expression data.
 
-* [PCA plots](pca.html)
+#### Analysis:
 
-### You can also access:
+* [PCA plots](pca.html) - The scatter plot of first two principal components for kidney/heart on mRNA-/protein-level
+
+#### You can also access:
 
 * [Dataset](https://github.com/simecek/TheAgingProteome/tree/master/data) (Original .RData data files)
 * [Processed data](https://github.com/simecek/TheAgingProteome/tree/master/output) (ANOVA & PCA results)
-* [Scripts](https://github.com/simecek/TheAgingProteome/tree/master/code) and [Makefile](https://github.com/simecek/TheAgingProteome/blob/master/Makefile)
-
+* [Scripts](https://github.com/simecek/TheAgingProteome/tree/master/code) and [Makefile](https://github.com/simecek/TheAgingProteome/blob/master/Makefile) used for data processing
