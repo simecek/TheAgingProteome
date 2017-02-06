@@ -9,19 +9,19 @@ Processed data are too big to be stored on Github but download links are provide
 
 ### ANOVA output:
 
-The columns in CSV table with results are as follows:
+The columns in CSV table with heart/kidney results are as follows:
 
 - `id`, `gene_id`, `symbol`, `chr`, `start`, `end`, `strand`, `biotype` = gene/protein annotation.
-- `p.X_Y.Z` is p-value for a test of a submodel `lm(X ~ Y + Z)` vs `lm(X ~ Z)`. Generation factor is included in all models even if not mentioned explicitely.
-- `r.X_Y.Z` is a partial correlation coefficient  . Generation factor is always included in `Z` covars even if not mentioned explicitely.
-- `p.X_Int.Z` is p-value for a test of an interaction submodel `lm(X ~ Age * Sex + Z)` vs `lm(X ~ Age + Sex + Z)`.
-- `lod` columns
-- `average` columns
+- `p.X_Y.Z` is p-value for a test of a submodel `lm(X ~ Z)` of a model `lm(X ~ Y + Z)`. Generation factor is included in all models even if not mentioned explicitely.
+- `r.X_Y.Z` is a partial correlation coefficient  `r(X,Y|Z)`. Generation is always included in `Z`.
+- `p.X_Int.Z` is p-value for a test of an interaction between `Age` and `Sex`, i.e. `lm(X ~ Age * Sex + Z)` vs `lm(X ~ Age + Sex + Z)`.
+- `lod.X_Y.Z`: Change in log10-likelihood of `X` if `Y` is dropped (conditioned on covars `Z`) 
+- `average.(mRNA|Prot).G.L`: average expression calculated for samples that in groupping `G` attain a level `L`
 
 Only genes with both mRNA and protein expression are used.
 
 ### PCA output:
 
-For top 10 PCA, both for mRNA and proteins, the output tables contain loadings (=eigenvectors) and predictions (sample-level coefficients).
+For top10 principal components (PCAs), the output tables contain loadings (=eigenvectors) and predictions (sample-level coefficients), both on mRNA and protein levels.
 
 Currently, only genes with both mRNA and protein expression with no missing values are used.
