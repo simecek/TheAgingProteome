@@ -5,13 +5,13 @@ output:
     toc: false
 ---
 
-Analyses:
+### Analyses:
 
 * [PCA plots](pca.html)
 
-You can also access:
+### You can also access:
 
 * [Dataset](https://github.com/simecek/TheAgingProteome/tree/master/data) (Original .RData data files)
 * [Processed data](https://github.com/simecek/TheAgingProteome/tree/master/output) (ANOVA & PCA results)
-
+* [Scripts](https://github.com/simecek/TheAgingProteome/tree/master/code) and [Makefile](https://github.com/simecek/TheAgingProteome/blob/master/Makefile)
 

@@ -1,5 +1,5 @@
 # The Aging Proteome
 
-A [workflowr][] project.
+See the [web pages](https://simecek.github.io/TheAgingProteome/).
 
-[workflowr]: https://github.com/jdblischak/workflowr
+Built with [workflowr](https://github.com/jdblischak/workflowr).
