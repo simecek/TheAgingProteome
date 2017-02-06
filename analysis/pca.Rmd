@@ -1,6 +1,7 @@
 ---
 title: "PCA plots"
 author: "Petr Simecek"
+date: 2017-02-06
 output: html_document
 ---
 

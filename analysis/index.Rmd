@@ -5,11 +5,13 @@ output:
     toc: false
 ---
 
-The goal of this new template is to simplify the setup and maintenance of a research website.
-Specifically,
+Analyses:
 
-*  Easier to build and extend the website using the new tools in the [rmarkdown][] package and [latest RStudio release][rstudio]
-*  Easier to deploy the website with Git and GitHub by only using one branch
+* [PCA plots](pca.html)
 
-[rmarkdown]: http://rmarkdown.rstudio.com/rmarkdown_websites.htm
-[rstudio]: https://www.rstudio.com/products/rstudio/download/preview/
+You can also access:
+
+* [Dataset](https://github.com/simecek/TheAgingProteome/tree/master/data) (Original .RData data files)
+* [Processed data](https://github.com/simecek/TheAgingProteome/tree/master/output) (ANOVA & PCA results)
+
+
