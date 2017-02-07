@@ -1,0 +1,122 @@
+---
+title: "Histograms of ANOVA p-values"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+For each gene/protein, we have fitted ANOVA model
+
+$$ y \sim Age + Sex+Generation$$
+
+and then tested significance of Age/Sex effects. The figures below visualise distribution of tests' p-values and compare them between kidney and heart.
+
+The Sex effect is weaker for heart than it is for kidney. For both tissues, the Age effect is much stronger on protein-level that it is on mRNA-level.
+
+The report have been generated from R/Markdown file [pval-historgrams.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pval-historgrams.Rmd).
+
+## mRNA - Age
+
+```{r mrna_age, echo=FALSE}
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(gridExtra))
+
+# load ANOVA results
+aov.kidney <- read.csv("../../kidney2/kidney_anova_table.csv", as.is=TRUE)
+aov.heart <- read.csv("../../heart2/heart_anova_table.csv", as.is=TRUE)
+
+p1 <- ggplot(aov.kidney, aes(x=p.mRNA_Age.Sex)) + 
+  geom_histogram(binwidth=0.04) +
+  theme_bw() +
+  labs(title="Kidney", 
+       subtitle="mRNA/Age",
+       x="p-value")
+p2 <- ggplot(aov.heart, aes(x=p.mRNA_Age.Sex)) + 
+  geom_histogram(binwidth=0.04) +
+  theme_bw() +
+  labs(title="Heart", 
+       subtitle="mRNA/Age",
+       x="p-value")
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+\ 
+
+## mRNA - Sex
+
+```{r mrna_sex, echo=FALSE}
+p1 <- ggplot(aov.kidney, aes(x=p.mRNA_Sex.Age)) + 
+  geom_histogram(binwidth=0.04) +
+  theme_bw() +
+  labs(title="Kidney", 
+       subtitle="mRNA/Sex",
+       x="p-value")
+p2 <- ggplot(aov.heart, aes(x=p.mRNA_Sex.Age)) + 
+  geom_histogram(binwidth=0.04) +
+  theme_bw() +
+  labs(title="Heart", 
+       subtitle="mRNA/Sex",
+       x="p-value")
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+\ 
+
+## Protein - Age
+
+```{r protein_age, echo=FALSE}
+p1 <- ggplot(aov.kidney, aes(x=p.Prot_Age.Sex)) + 
+  geom_histogram(binwidth=0.04) +
+  theme_bw() +
+  labs(title="Kidney", 
+       subtitle="Protein/Age",
+       x="p-value")
+p2 <- ggplot(aov.heart, aes(x=p.Prot_Age.Sex)) + 
+  geom_histogram(binwidth=0.04) +
+  theme_bw() +
+  labs(title="Heart", 
+       subtitle="Protein/Age",
+       x="p-value")
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+\ 
+
+## Protein - Sex
+
+```{r protein_sex, echo=FALSE}
+p1 <- ggplot(aov.kidney, aes(x=p.Prot_Sex.Age)) + 
+  geom_histogram(binwidth=0.04) +
+  theme_bw() +
+  labs(title="Kidney", 
+       subtitle="Protein/Sex",
+       x="p-value")
+p2 <- ggplot(aov.heart, aes(x=p.Prot_Sex.Age)) + 
+  geom_histogram(binwidth=0.04) +
+  theme_bw() +
+  labs(title="Heart", 
+       subtitle="Protein/Sex",
+       x="p-value")
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+\ 
+
+## Session Information
+
+```{r session-info}
+```

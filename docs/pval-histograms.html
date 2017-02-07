@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Petr Simecek" />
 
 
-<title>Home</title>
+<title>Histograms of ANOVA p-values</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
@@ -162,6 +166,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -202,29 +301,67 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Histograms of ANOVA p-values</h1>
+<h4 class="author"><em>Petr Simecek</em></h4>
 
 </div>
 
 
-<p>An unpublished analysis of aging <a href="https://www.jax.org/strain/009376">Diversity Outbred</a> (mouse) kidney/heart expression data.</p>
-<div id="reports" class="section level4">
-<h4>Reports:</h4>
-<ul>
-<li><a href="new-med-plots.html">Age/Sex Effect Mediation</a> - Is Age/Sex Effect On Protein Expression Mediated by RNA? (p-value version)</li>
-<li><a href="old-med-plots.html">Age/Sex Effect Mediation2</a> - Is Age/Sex Effect On Protein Expression Mediated by RNA? (LOD version)</li>
-<li><a href="pval-histograms.html">Histograms</a> of Sex/Age ANOVA tests’ p-values</li>
-<li><a href="pca.html">PCA plots</a> - The scatter plot of the first two principal components for kidney/heart on mRNA-/protein-level.</li>
-</ul>
+<p><strong>Last updated:</strong> 2017-02-07</p>
+<p><strong>Code version:</strong> 2a61a6d</p>
+<p>For each gene/protein, we have fitted ANOVA model</p>
+<p><span class="math display">\[ y \sim Age + Sex+Generation\]</span></p>
+<p>and then tested significance of Age/Sex effect. The figures below visualise distribution of tests’ p-values and compare them between kidney and heart.</p>
+<p>The Sex effect is for some reason weaker for heart than it is for kidney. For both tissues, the Age effect is much stronger on protein-level that it is on mRNA-level.</p>
+<p>The report have been generated from R/Markdown file <a href="https://github.com/simecek/TheAgingProteome/blob/master/analysis/pval-historgrams.Rmd">pval-historgrams.Rmd</a>.</p>
+<div id="mrna---age" class="section level2">
+<h2>mRNA - Age</h2>
+<p><img src="figure/pval-histograms.Rmd/mrna_age-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
 </div>
-<div id="you-can-also-access" class="section level4">
-<h4>You can also access:</h4>
-<ul>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/data">Dataset</a> (Original .RData data files)</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/output">Processed data</a> (ANOVA &amp; PCA results)</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/code">Scripts</a> and <a href="https://github.com/simecek/TheAgingProteome/blob/master/Makefile">Makefile</a> used for data processing</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/analysis">RMarkdown files</a> generating the reports above</li>
-</ul>
+<div id="mrna---sex" class="section level2">
+<h2>mRNA - Sex</h2>
+<p><img src="figure/pval-histograms.Rmd/mrna_sex-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+</div>
+<div id="protein---age" class="section level2">
+<h2>Protein - Age</h2>
+<p><img src="figure/pval-histograms.Rmd/protein_age-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+</div>
+<div id="protein---sex" class="section level2">
+<h2>Protein - Sex</h2>
+<p><img src="figure/pval-histograms.Rmd/protein_sex-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p> </p>
+</div>
+<div id="session-information" class="section level2">
+<h2>Session Information</h2>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.3.2 (2016-10-31)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 7 x64 (build 7601) Service Pack 1
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] gridExtra_2.2.1 ggplot2_2.2.1  
+
+loaded via a namespace (and not attached):
+ [1] workflowr_0.3.0  Rcpp_0.12.9      assertthat_0.1   digest_0.6.11   
+ [5] rprojroot_1.2    plyr_1.8.4       grid_3.3.2       gtable_0.2.0    
+ [9] backports_1.0.4  git2r_0.18.0     magrittr_1.5     scales_0.4.1    
+[13] evaluate_0.10    stringi_1.1.2    lazyeval_0.2.0   rmarkdown_1.3   
+[17] labeling_0.3     tools_3.3.2      stringr_1.1.0    munsell_0.4.3   
+[21] yaml_2.1.14      colorspace_1.3-2 htmltools_0.3.5  knitr_1.15.1    
+[25] tibble_1.2      </code></pre>
 </div>
 
 <hr>
@@ -253,6 +390,8 @@ $(document).ready(function () {
 -->
 
 
+</div>
+</div>
 
 </div>
 

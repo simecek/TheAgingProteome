@@ -17,6 +17,8 @@ knitr::read_chunk("chunks.R")
 
 \ 
 
+PCA plots of gene/protein expression for kidney/heart tissue. We expect to see what are the main factors driving the expression and whether we have any outlying samples.
+
 All plots below are interactive (tooltip = mouse id) and have been generated from R/Markdown file [pca.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pca.Rmd).
 
 \ 
