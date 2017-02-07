@@ -34,7 +34,6 @@ All plots are interactive (tooltip = gene symbol), use `-log(p)` transformed p-v
 ```{r kidney, echo=FALSE}
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(plotly))
 suppressPackageStartupMessages(library(scales))
 
 # -log10(p) transformation for ggplot
@@ -47,8 +46,7 @@ reverselog_trans <- function(base = exp(1)) {
 }
 
 # read ANOVA table - kidney
-dt <- read.csv("../../kidney2/kidney_anova_table.csv", as.is = TRUE) %>%
-  select(symbol, starts_with("p.Prot_Age"),
+dt <- read.csv("../../kidney2/kidney_anova_table.csv", as.is = TRUE) %>% select(symbol, starts_with("p.Prot_Age"),
          starts_with("p.Prot_Sex"))
 
 # gathering `dt` from 4 cols to 2 cols (->ggplot)
@@ -68,7 +66,7 @@ pl <- ggplot(dt2, aes(x=x,  y=y, text=symbol)) +
   xlab("p-value (X)") +
   ylab("p-value (X | mRNA)") +
   theme_bw()
-ggplotly(pl, tooltip="text")
+plotly::ggplotly(pl, tooltip="text")
 ```
 
 \ 
@@ -99,7 +97,7 @@ pl <- ggplot(dt2, aes(x=x,  y=y, text=symbol)) +
   xlab("p-value (X)") +
   ylab("p-value (X | mRNA)") +
   theme_bw()
-ggplotly(pl, tooltip="text")
+plotly::ggplotly(pl, tooltip="text")
 ```
 
 
