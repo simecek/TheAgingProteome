@@ -1,0 +1,81 @@
+---
+title: "Is Age/Sex Effect Mediated by RNA? (LOD version)"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+This is the original analysis of Age/Sex effect mediation by mRNA using LOD (log-Likelihood) statistics. All plots are interactive (tooltip = gene symbol) and have been generated from R/Markdown file [old-med-plots.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/old-med-plots.Rmd).
+
+## Kidney
+
+```{r kidney, echo=FALSE}
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(plotly))
+
+
+# read ANOVA table - kidney
+dt <- read.csv("../../kidney2/kidney_anova_table.csv", as.is = TRUE) %>%
+  select(symbol, starts_with("lod"))
+
+# gathering `dt` from 4 cols to 2 cols (->ggplot)
+tmp1 <- select(dt, symbol, starts_with("lod.Prot_Age"))
+tmp2 <- select(dt, symbol, starts_with("lod.Prot_Sex"))
+names(tmp1) <- names(tmp2) <- c("symbol", "y", "x")
+tmp1$var <- "Age"
+tmp2$var <- "Sex"
+dt2 <- rbind(tmp1, tmp2)
+
+pl <- ggplot(dt2, aes(x=x,y=y,text=symbol)) +
+  geom_point(alpha=0.2) + 
+  geom_abline(intercept = 0, slope = 1, color="red") +
+  facet_wrap(~var) +
+  xlab("LOD(Protein ~ X)") +
+  ylab("LOD(Protein ~ X | mRNA)") +
+  theme_bw()
+ggplotly(pl, tooltip="text")
+```
+
+## Heart
+
+```{r heart, echo=FALSE}
+
+# read ANOVA table - heart
+dt <- read.csv("../../heart2/heart_anova_table.csv", as.is = TRUE) %>%
+  select(symbol, starts_with("lod"))
+
+# gathering `dt` from 4 cols to 2 cols (->ggplot)
+tmp1 <- select(dt, symbol, starts_with("lod.Prot_Age"))
+tmp2 <- select(dt, symbol, starts_with("lod.Prot_Sex"))
+names(tmp1) <- names(tmp2) <- c("symbol", "y", "x")
+tmp1$var <- "Age"
+tmp2$var <- "Sex"
+dt2 <- rbind(tmp1, tmp2)
+
+pl <- ggplot(dt2, aes(x=x,y=y,text=symbol)) +
+  geom_point(alpha=0.2) + 
+  geom_abline(intercept = 0, slope = 1, color="red") +
+  facet_wrap(~var) +
+  xlab("LOD(Protein ~ X)") +
+  ylab("LOD(Protein ~ X | mRNA)") +
+  theme_bw()
+  
+ggplotly(pl, tooltip="text")
+```
+
+
+## Session Information
+
+```{r session-info}
+```
