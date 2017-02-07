@@ -1,0 +1,170 @@
+---
+title: "Mediation examples"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+
+A few selected patterns of Age/Sex effects on kidney/heart protein expression and its mediation by mRNA. The effect, that is mediated, is always visualised by a color, the other effect by a shape.
+
+You can also use R/Shiny app: http://churchilldev.jax.org:49194/effectmed/ (JAX network only)
+
+The report have been generated from R/Markdown file [examples.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/examples.Rmd).
+
+\ 
+
+## Gsta1
+
+glutathione S-transferase, alpha 1
+
+```{r Gsta1, echo=FALSE, fig.width=10, fig.height=10}
+# load data
+kidney = new.env()
+heart = new.env()
+load("../../kidney2/R/DO188b_kidney_noprobs.RData", env=kidney)
+load("../../heart2/DO189_heart_v2_noprobs.RData", env=heart)
+
+suppressPackageStartupMessages(library(ggplot2))
+
+gene.symbol <- "Gsta1"
+tissue <- kidney
+
+idx <- which(tissue$annot.protein$symbol == gene.symbol)
+stopifnot(length(idx)==1)
+dt <- cbind(tissue$annot.samples, 
+            mrna = tissue$expr.mrna[,idx], 
+            protein = tissue$expr.protein[,idx])
+dt$Age <- factor(dt$Age)
+ggplot(dt, aes(x=mrna, y=protein, color=Sex, shape=Age)) +
+          geom_point(size=I(3)) +
+          labs(title = gene.symbol, caption = "tissue: Kidney") +
+          theme_light()
+```
+
+\ 
+
+## Fmo5
+
+flavin containing monooxygenase 5
+
+```{r Fmo5, echo=FALSE, fig.width=10, fig.height=10}
+gene.symbol <- "Fmo5"
+tissue <- kidney
+
+idx <- which(tissue$annot.protein$symbol == gene.symbol)
+stopifnot(length(idx)==1)
+dt <- cbind(tissue$annot.samples, 
+            mrna = tissue$expr.mrna[,idx], 
+            protein = tissue$expr.protein[,idx])
+dt$Age <- factor(dt$Age)
+ggplot(dt, aes(x=mrna, y=protein, color=Sex, shape=Age)) +
+          geom_point(size=I(3)) +
+          labs(title = gene.symbol, caption = "tissue: Kidney") +
+          theme_light()
+```
+
+\ 
+
+## Ace
+
+angiotensin I converting enzyme (peptidyl-dipeptidase A) 1
+
+```{r Ace, echo=FALSE, fig.width=10, fig.height=10}
+gene.symbol <- "Ace"
+tissue <- kidney
+
+idx <- which(tissue$annot.protein$symbol == gene.symbol)
+stopifnot(length(idx)==1)
+dt <- cbind(tissue$annot.samples, 
+            mrna = tissue$expr.mrna[,idx], 
+            protein = tissue$expr.protein[,idx])
+dt$Age <- factor(dt$Age)
+ggplot(dt, aes(x=mrna, y=protein, color=Sex, shape=Age)) +
+          geom_point(size=I(3)) +
+          labs(title = gene.symbol, caption = "tissue: Kidney") +
+          theme_light()
+```
+
+\ 
+
+## Clca1
+
+chloride channel accessory 1
+
+```{r Clca1, echo=FALSE, fig.width=10, fig.height=10}
+gene.symbol <- "Clca1"
+tissue <- kidney
+
+idx <- which(tissue$annot.protein$symbol == gene.symbol)
+stopifnot(length(idx)==1)
+dt <- cbind(tissue$annot.samples, 
+            mrna = tissue$expr.mrna[,idx], 
+            protein = tissue$expr.protein[,idx])
+dt$Age <- factor(dt$Age)
+ggplot(dt, aes(x=mrna, y=protein, color=Age, shape=Sex)) +
+          geom_point(size=I(3)) +
+          labs(title = gene.symbol, caption = "tissue: Kidney") +
+          theme_light()
+```
+
+\ 
+
+## Acta2
+
+actin, alpha 2, smooth muscle, aorta
+
+```{r Acta2, echo=FALSE, fig.width=10, fig.height=10}
+gene.symbol <- "Acta2"
+tissue <- kidney
+
+idx <- which(tissue$annot.protein$symbol == gene.symbol)
+stopifnot(length(idx)==1)
+dt <- cbind(tissue$annot.samples, 
+            mrna = tissue$expr.mrna[,idx], 
+            protein = tissue$expr.protein[,idx])
+dt$Age <- factor(dt$Age)
+ggplot(dt, aes(x=mrna, y=protein, color=Age, shape=Sex)) +
+          geom_point(size=I(3)) +
+          labs(title = gene.symbol, caption = "tissue: Kidney") +
+          theme_light()
+```
+
+\ 
+
+## Slc1a4
+
+solute carrier family 1 (glutamate/neutral amino acid transporter), member 4
+
+```{r Slc1a4, echo=FALSE, fig.width=10, fig.height=10}
+gene.symbol <- "Slc1a4"
+tissue <- kidney
+
+idx <- which(tissue$annot.protein$symbol == gene.symbol)
+stopifnot(length(idx)==1)
+dt <- cbind(tissue$annot.samples, 
+            mrna = tissue$expr.mrna[,idx], 
+            protein = tissue$expr.protein[,idx])
+dt$Age <- factor(dt$Age)
+ggplot(dt, aes(x=mrna, y=protein, color=Age, shape=Sex)) +
+          geom_point(size=I(3)) +
+          labs(title = gene.symbol, caption = "tissue: Kidney") +
+          theme_light()
+```
+
+\ 
+
+## Session Information
+
+```{r session-info}
+```

@@ -15,7 +15,7 @@ knitr::read_chunk("chunks.R")
 
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
-For each gene/protein, we have fitted ANOVA model
+For each gene/protein, we have fitted a linear model
 
 $$ y \sim Age + Sex+Generation$$
 
@@ -23,7 +23,7 @@ and then tested significance of Age/Sex effects. The figures below visualise dis
 
 The Sex effect is weaker for heart than it is for kidney. For both tissues, the Age effect is much stronger on protein-level that it is on mRNA-level.
 
-The report have been generated from R/Markdown file [pval-historgrams.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pval-historgrams.Rmd).
+The report have been generated from R/Markdown file [pval-historgrams.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pval-histograms.Rmd).
 
 ## mRNA - Age
 
