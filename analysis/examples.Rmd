@@ -16,11 +16,11 @@ knitr::read_chunk("chunks.R")
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
 
-A few selected patterns of Age/Sex effects on kidney/heart protein expression and its mediation by mRNA. The effect, that is mediated, is always visualised by a color, the other effect by a shape.
+A few selected patterns of Age/Sex effects on kidney/heart protein expression and its mediation by mRNA. The effect, which is mediated, is always visualized by a color, the other effect is visualized by a shape.
 
 You can also use R/Shiny app: http://churchilldev.jax.org:49194/effectmed/ (JAX network only)
 
-The report have been generated from R/Markdown file [examples.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/examples.Rmd).
+The report has been generated from R/Markdown file [examples.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/examples.Rmd).
 
 \ 
 

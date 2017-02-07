@@ -25,7 +25,7 @@ $$ Protein \sim Age + Sex+Generation+mRNA$$
 
 Let us assume Age/Sex effect is highly significant in the first model (p-value close to zero). If the effect is mediated by mRNA expression (Age/Sex -> mRNA -> Protein) then the dependence in the second model should be much weaker (i.e. p-value higher). 
 
-If Age/Sex effect skip mRNA-level and influence protein expression directly, i.e. the effect is not mediated by mRNA, then we expect p-value not to change (or even decrease if strong mRNA-Protein relationship explains part of noise).
+If Age/Sex effect skips mRNA-level and influence protein expression directly, i.e. the effect is not mediated by mRNA, then we expect p-value not to change (or even decrease if strong mRNA-Protein relationship explains part of noise).
 
 All plots are interactive (tooltip = gene symbol), use `-log(p)` transformed p-values and have been generated from R/Markdown file [new-med-plots.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/new-med-plots.Rmd).
 

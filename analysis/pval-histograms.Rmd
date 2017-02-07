@@ -19,11 +19,11 @@ For each gene/protein, we have fitted a linear model
 
 $$ y \sim Age + Sex+Generation$$
 
-and then tested significance of Age/Sex effects. The figures below visualise distribution of tests' p-values and compare them between kidney and heart.
+and then tested the significance of Age/Sex effects. The figures below visualize the distribution of tests’ p-values and compare them between kidney and heart.
 
-The Sex effect is weaker for heart than it is for kidney. For both tissues, the Age effect is much stronger on protein-level that it is on mRNA-level.
+The Sex effect is weaker for the heart than it is for a kidney. For both tissues, the Age effect is much stronger on protein-level that it is on mRNA-level.
 
-The report have been generated from R/Markdown file [pval-historgrams.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pval-histograms.Rmd).
+The report has been generated from R/Markdown file [pval-historgrams.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pval-histograms.Rmd).
 
 ## mRNA - Age
 

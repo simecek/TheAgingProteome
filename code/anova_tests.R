@@ -7,7 +7,7 @@
 # Rscript anova_tests.R input.RData output.csv
 
 library(broom)
-library(ppcor) # currently not used
+# library(ppcor) # library for partial correlation coefs
 
 # Options -----------------------------------------------------------------
 
@@ -58,13 +58,24 @@ for (v in vars)
 ## test for dependence between Age/Sex and x (x is mRNA/Prot expression)
 anova_tests_2 <- function(x) {
   # full model without interaction
-  lm.full <- tidy(lm(x ~ Age + Sex + Generation, data=annot.samples))
+  tmp.full <- lm(x ~ Age + Sex + Generation, data=annot.samples)
+  lm.full <- tidy(tmp.full)
 
   pvalues <- c(subset(lm.full, term=="Age")$p.value,
                subset(lm.full, term=="Sex")$p.value)
+
+  # partial correlation coefficient equals normalized beta * CONST
+  # see http://stats.stackexchange.com/questions/76815/multiple-regression-or-partial-correlation-coefficient-and-relations-between-th
   
-  coefs <- c(subset(lm.full, term=="Age")$estimate,
-             subset(lm.full, term=="Sex")$estimate)
+  pres <- !is.na(x) # must be calculated on the same observations
+  tmp.age  <- lm(Age ~ Sex + Generation, data=annot.samples[pres,])
+  tmp.sex  <- lm(Sex ~ Age + Generation, data=annot.samples[pres,])
+  sigma.full <- sd(tmp.full$resid, na.rm = TRUE)
+  sigma.age <- sd(tmp.age$resid, na.rm = TRUE)
+  sigma.sex <- sd(tmp.sex$resid, na.rm = TRUE)
+    
+  coefs <- c(subset(lm.full, term=="Age")$estimate * sigma.age,
+             subset(lm.full, term=="Sex")$estimate * sigma.sex) / sigma.full
   
   return(c(pvalues,coefs))
 }
@@ -73,22 +84,44 @@ anova_tests_2 <- function(x) {
 ## conditioned on y (y is Prot/mRNA expression)
 anova_tests_3 <- function(x,y) {
   # full model without interaction
-  lm.full <- tidy(lm(x ~ Age + Sex + Generation + y, data=annot.samples))
+  tmp.full <- lm(x ~ Age + Sex + Generation + y, data=annot.samples)
+  lm.full <- tidy(tmp.full)
   # the model without Age
-  lm.sex <- tidy(lm(x ~ Sex + Generation + y, data=annot.samples))
+  tmp.noage <- lm(x ~ Sex + Generation + y, data=annot.samples)
+  lm.sex <- tidy(tmp.noage)
   # the model without Sex
-  lm.age <- tidy(lm(x ~ Age + Generation + y, data=annot.samples))
+  tmp.nosex <- lm(x ~ Age + Generation + y, data=annot.samples)
+  lm.age <- tidy(tmp.nosex)
   
   pvalues <- c(subset(lm.full, term=="Age")$p.value,
                subset(lm.full, term=="Sex")$p.value,
                subset(lm.full, term=="y")$p.value,
                subset(lm.sex, term=="y")$p.value,
                subset(lm.age, term=="y")$p.value)
-  coefs <- c(subset(lm.full, term=="Age")$estimate,
-             subset(lm.full, term=="Sex")$estimate,
-             subset(lm.full, term=="y")$estimate,
-             subset(lm.sex, term=="y")$estimate,
-             subset(lm.age, term=="y")$estimate)
+  
+  # partial correlation coefficient equals normalized beta * CONST
+  # see http://stats.stackexchange.com/questions/76815/multiple-regression-or-partial-correlation-coefficient-and-relations-between-th
+  
+  pres <- !is.na(x) & !is.na(y) # must be calculated on the same observations
+  tmp.age  <- lm(Age ~ Sex + Generation + y[pres], data=annot.samples[pres,])
+  tmp.sex  <- lm(Sex ~ Age + Generation + y[pres], data=annot.samples[pres,])
+  tmp.y    <- lm(y[pres] ~ Sex + Age + Generation, data=annot.samples[pres,])
+  sigma.full <- sd(tmp.full$resid, na.rm = TRUE)
+  sigma.age <- sd(tmp.age$resid, na.rm = TRUE)
+  sigma.sex <- sd(tmp.sex$resid, na.rm = TRUE)
+  sigma.y <- sd(tmp.y$resid, na.rm = TRUE)
+  tmp.noage.y <- lm(y[pres] ~ Sex + Generation, data=annot.samples[pres,])
+  tmp.nosex.y <- lm(y[pres] ~ Age + Generation, data=annot.samples[pres,])
+  sigma.noage <- sd(tmp.noage$resid, na.rm = TRUE)
+  sigma.noage.y <- sd(tmp.noage.y$resid, na.rm = TRUE)
+  sigma.nosex <- sd(tmp.nosex$resid, na.rm = TRUE)
+  sigma.nosex.y <- sd(tmp.nosex.y$resid, na.rm = TRUE)
+  
+  coefs <- c(subset(lm.full, term=="Age")$estimate * sigma.age / sigma.full,
+             subset(lm.full, term=="Sex")$estimate * sigma.sex / sigma.full,
+             subset(lm.full, term=="y")$estimate * sigma.y / sigma.full,
+             subset(lm.sex, term=="y")$estimate * sigma.noage.y /sigma.noage,
+             subset(lm.age, term=="y")$estimate * sigma.nosex.y / sigma.nosex)
   
   return(c(pvalues,coefs))
 }
