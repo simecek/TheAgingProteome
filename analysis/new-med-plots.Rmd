@@ -15,9 +15,7 @@ knitr::read_chunk("chunks.R")
 
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
-** WARNING - SOMETHING IS WRONG HERE **
-
-This is the analysis of Age/Sex effect mediation by mRNA using p-values (new version). All plots are (will be) interactive (tooltip = gene symbol) and have been generated from R/Markdown file [new-med-plots.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/new-med-plots.Rmd).
+This is the analysis of Age/Sex effect mediation by mRNA using p-values (new version). All plots are interactive (tooltip = gene symbol) and have been generated from R/Markdown file [new-med-plots.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/new-med-plots.Rmd).
 
 ## Kidney
 
@@ -44,24 +42,24 @@ dt <- read.csv("../../kidney2/kidney_anova_table.csv", as.is = TRUE) %>%
 # gathering `dt` from 4 cols to 2 cols (->ggplot)
 tmp1 <- select(dt, symbol, starts_with("p.Prot_Age"))
 tmp2 <- select(dt, symbol, starts_with("p.Prot_Sex"))
-names(tmp1) <- names(tmp2) <- c("symbol", "y", "x")
+names(tmp1) <- names(tmp2) <- c("symbol", "x", "y")
 tmp1$var <- "Age"
 tmp2$var <- "Sex"
 dt2 <- rbind(tmp1, tmp2)
 
-eps <- 0.0000001
-pl <- ggplot(dt2, aes(x=x+eps, y=y+eps,text=symbol)) +
+pl <- ggplot(dt2, aes(x=x,  y=y, text=symbol)) +
   geom_point(alpha=0.2) + 
   geom_abline(intercept = 0, slope = 1, color="red") +
   scale_x_continuous(trans=reverselog_trans(10)) +
   scale_y_continuous(trans=reverselog_trans(10)) +
   facet_wrap(~var) +
-  xlab("LOD(Protein ~ X)") +
-  ylab("LOD(Protein ~ X | mRNA)") +
+  xlab("p-value (X)") +
+  ylab("p-value (X | mRNA)") +
   theme_bw()
-pl
-#ggplotly(pl, tooltip="text")
+ggplotly(pl, tooltip="text")
 ```
+
+\ 
 
 ## Heart
 
@@ -75,23 +73,21 @@ dt <- read.csv("../../heart2/heart_anova_table.csv", as.is = TRUE) %>%
 # gathering `dt` from 4 cols to 2 cols (->ggplot)
 tmp1 <- select(dt, symbol, starts_with("p.Prot_Age"))
 tmp2 <- select(dt, symbol, starts_with("p.Prot_Sex"))
-names(tmp1) <- names(tmp2) <- c("symbol", "y", "x")
+names(tmp1) <- names(tmp2) <- c("symbol", "x", "y")
 tmp1$var <- "Age"
 tmp2$var <- "Sex"
 dt2 <- rbind(tmp1, tmp2)
 
-eps <- 0.0000001
-pl <- ggplot(dt2, aes(x=x+eps, y=y+eps,text=symbol)) +
+pl <- ggplot(dt2, aes(x=x,  y=y, text=symbol)) +
   geom_point(alpha=0.2) + 
   geom_abline(intercept = 0, slope = 1, color="red") +
   scale_x_continuous(trans=reverselog_trans(10)) +
   scale_y_continuous(trans=reverselog_trans(10)) +
   facet_wrap(~var) +
-  xlab("LOD(Protein ~ X)") +
-  ylab("LOD(Protein ~ X | mRNA)") +
+  xlab("p-value (X)") +
+  ylab("p-value (X | mRNA)") +
   theme_bw()
-pl
-#ggplotly(pl, tooltip="text")
+ggplotly(pl, tooltip="text")
 ```
 
 
