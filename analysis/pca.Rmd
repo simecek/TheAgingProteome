@@ -1,7 +1,6 @@
 ---
 title: "PCA plots"
 author: "Petr Simecek"
-date: 2017-02-06
 output: html_document
 ---
 
@@ -16,41 +15,72 @@ knitr::read_chunk("chunks.R")
 
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
+\ 
+
+All plots below are interactive (tooltip = mouse id) and have been generated from R/Markdown file [pca.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pca.Rmd).
+
+\ 
 
 ## Kidney mRNA-level PCA
 
 ```{r kidney_mrna, echo=FALSE}
 suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(plotly))
+
+# load data - kidney
 dt <- read.csv("../../kidney2/kidney_pca_predict.csv", as.is=TRUE)
-ggplot(dt, aes(x=PC1_mrna, y=PC2_mrna, shape=Sex, color=factor(Age))) +   geom_point(size=I(3)) + 
-  ggtitle("Kidney mRNA: PCA1 vs. PCA2") +
+dt$Age <- factor(dt$Age)
+dt$text <- paste0(dt$Sex, dt$Sample.Number)
+
+pl <- ggplot(dt, aes(x=PC1_mrna, y=PC2_mrna, shape=Sex, color=Age, text=text)) +   
+  geom_point(size=I(3)) + 
+  ggtitle("Kidney mRNA expression: PCA1 vs. PCA2") +
   theme_bw()
+ggplotly(pl, tooltip="text")
 ```
+
+\ 
 
 ## Kidney protein-level PCA
 
 ```{r kidney_protein, echo=FALSE}
-ggplot(dt, aes(x=PC1_prot, y=PC2_prot, shape=Sex, color=factor(Age))) +   geom_point(size=I(3)) + 
-  ggtitle("Kidney mRNA: PCA1 vs. PCA2") +
+pl<- ggplot(dt, aes(x=PC1_prot, y=PC2_prot, shape=Sex, color=Age, text=text)) +
+  geom_point(size=I(3)) + 
+  ggtitle("Kidney protein expression: PCA1 vs. PCA2") +
   theme_bw()
+ggplotly(pl, tooltip="text")
 ```
+
+\ 
 
 ## Heart mRNA-level PCA
 
 ```{r heart_mrna, echo=FALSE}
+# load data - heart
 dt <- read.csv("../../heart2/heart_pca_predict.csv", as.is=TRUE)
-ggplot(dt, aes(x=PC1_mrna, y=PC2_mrna, shape=Sex, color=factor(Age))) +   geom_point(size=I(3)) + 
-  ggtitle("Heart mRNA: PCA1 vs. PCA2") +
+dt$Age <- factor(dt$Age)
+dt$text <- paste0(dt$Sex, dt$Sample.Number)
+
+pl <- ggplot(dt, aes(x=PC1_mrna, y=PC2_mrna, shape=Sex, color=Age, text=text)) +   
+  geom_point(size=I(3)) + 
+  ggtitle("Heart mRNA expression: PCA1 vs. PCA2") +
   theme_bw()
+ggplotly(pl, tooltip="text")
 ```
+
+\ 
 
 ## Heart protein-level PCA
 
 ```{r heart_protein, echo=FALSE}
-ggplot(dt, aes(x=PC1_prot, y=PC2_prot, shape=Sex, color=factor(Age))) +   geom_point(size=I(3)) + 
-  ggtitle("Heart mRNA: PCA1 vs. PCA2") +
+pl <- ggplot(dt, aes(x=PC1_prot, y=PC2_prot, shape=Sex, color=Age, text=text)) +   
+  geom_point(size=I(3)) + 
+  ggtitle("Heart protein expression: PCA1 vs. PCA2") +
   theme_bw()
+ggplotly(pl, tooltip="text")
 ```
+
+\ 
 
 ## Session Information
 
