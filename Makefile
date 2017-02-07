@@ -14,11 +14,11 @@ pca: ../kidney2/kidney_pca_loadings.csv ../heart2/heart_pca_loadings.csv
 
 ../kidney2/kidney_pca_loadings.csv: code/pca.R ../kidney2/R/DO188b_kidney_noprobs.RData
 	Rscript code/pca.R ../kidney2/R/DO188b_kidney_noprobs.RData \
-    ../kidney2/kidney_pca_loading.csv ../kidney2/kidney_pca_predict.csv
+    ../kidney2/kidney_pca_loadings.csv ../kidney2/kidney_pca_predict.csv
 
 ../kidney2/kidney_pca_predict.csv: code/pca.R ../kidney2/R/DO188b_kidney_noprobs.RData
 	Rscript code/pca.R ../kidney2/R/DO188b_kidney_noprobs.RData \
-    ../kidney2/kidney_pca_loading.csv ../kidney2/kidney_pca_predict.csv
+    ../kidney2/kidney_pca_loadings.csv ../kidney2/kidney_pca_predict.csv
 
 ../heart2/heart_pca_loadings.csv: code/pca.R ../heart2/DO189_heart_v2_noprobs.RData
 	Rscript code/pca.R ../heart2/DO189_heart_v2_noprobs.RData \
