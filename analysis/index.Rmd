@@ -5,7 +5,7 @@ output:
     toc: false
 ---
 
-Unpublished analysis of aging [Diversity Outbred](https://www.jax.org/strain/009376) (mouse) kidney/heart expression data.
+An unpublished analysis of aging [Diversity Outbred](https://www.jax.org/strain/009376) (mouse) kidney/heart expression data.
 
 #### Reports:
 
@@ -16,4 +16,4 @@ Unpublished analysis of aging [Diversity Outbred](https://www.jax.org/strain/009
 * [Dataset](https://github.com/simecek/TheAgingProteome/tree/master/data) (Original .RData data files)
 * [Processed data](https://github.com/simecek/TheAgingProteome/tree/master/output) (ANOVA & PCA results)
 * [Scripts](https://github.com/simecek/TheAgingProteome/tree/master/code) and [Makefile](https://github.com/simecek/TheAgingProteome/blob/master/Makefile) used for data processing
-* [RMarkdown files](https://github.com/simecek/TheAgingProteome/tree/master/analysis) that generated reports above 
+* [RMarkdown files](https://github.com/simecek/TheAgingProteome/tree/master/analysis) generating the reports above 
