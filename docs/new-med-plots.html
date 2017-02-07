@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Petr Simecek" />
 
 
-<title>Home</title>
+<title>Is Age/Sex Effect Mediated by RNA? (p-value version)</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
@@ -162,6 +166,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -202,28 +301,56 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Is Age/Sex Effect Mediated by RNA? (p-value version)</h1>
+<h4 class="author"><em>Petr Simecek</em></h4>
 
 </div>
 
 
-<p>An unpublished analysis of aging <a href="https://www.jax.org/strain/009376">Diversity Outbred</a> (mouse) kidney/heart expression data.</p>
-<div id="reports" class="section level4">
-<h4>Reports:</h4>
-<ul>
-<li><a href="new-med-plots.html">Age/Sex Effect Mediation</a> - Is Age/Sex Effect On Protein Expression Mediated by RNA? (p-value version)</li>
-<li><a href="old-med-plots.html">Age/Sex Effect Mediation2</a> - Is Age/Sex Effect On Protein Expression Mediated by RNA? (LOD version)</li>
-<li><a href="pca.html">PCA plots</a> - The scatter plot of the first two principal components for kidney/heart on mRNA-/protein-level.</li>
-</ul>
+<p><strong>Last updated:</strong> 2017-02-07</p>
+<p><strong>Code version:</strong> 3dae8ce</p>
+<p>** WARNING - SOMETHING IS WRONG HERE **</p>
+<p>This is the analysis of Age/Sex effect mediation by mRNA using p-values (new version). All plots are (will be) interactive (tooltip = gene symbol) and have been generated from R/Markdown file <a href="https://github.com/simecek/TheAgingProteome/blob/master/analysis/new-med-plots.Rmd">new-med-plots.Rmd</a>.</p>
+<div id="kidney" class="section level2">
+<h2>Kidney</h2>
+<p><img src="figure/new-med-plots.Rmd/kidney-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="you-can-also-access" class="section level4">
-<h4>You can also access:</h4>
-<ul>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/data">Dataset</a> (Original .RData data files)</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/output">Processed data</a> (ANOVA &amp; PCA results)</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/code">Scripts</a> and <a href="https://github.com/simecek/TheAgingProteome/blob/master/Makefile">Makefile</a> used for data processing</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/analysis">RMarkdown files</a> generating the reports above</li>
-</ul>
+<div id="heart" class="section level2">
+<h2>Heart</h2>
+<p><img src="figure/new-med-plots.Rmd/heart-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="session-information" class="section level2">
+<h2>Session Information</h2>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.3.2 (2016-10-31)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 7 x64 (build 7601) Service Pack 1
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] scales_0.4.1  plotly_4.5.6  dplyr_0.5.0   ggplot2_2.2.1
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_0.12.9       knitr_1.15.1      magrittr_1.5     
+ [4] workflowr_0.3.0   munsell_0.4.3     viridisLite_0.1.3
+ [7] colorspace_1.3-2  R6_2.2.0          httr_1.2.1       
+[10] stringr_1.1.0     plyr_1.8.4        tools_3.3.2      
+[13] grid_3.3.2        gtable_0.2.0      DBI_0.5-1        
+[16] git2r_0.18.0      htmltools_0.3.5   yaml_2.1.14      
+[19] lazyeval_0.2.0    rprojroot_1.2     digest_0.6.11    
+[22] assertthat_0.1    tibble_1.2        tidyr_0.6.1      
+[25] purrr_0.2.2       htmlwidgets_0.8   base64enc_0.1-3  
+[28] evaluate_0.10     rmarkdown_1.3     stringi_1.1.2    
+[31] backports_1.0.4   jsonlite_1.2     </code></pre>
 </div>
 
 <hr>
@@ -252,6 +379,8 @@ $(document).ready(function () {
 -->
 
 
+</div>
+</div>
 
 </div>
 

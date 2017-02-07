@@ -224,7 +224,7 @@ annot.cols <- c("id",	"gene_id",	"symbol",	"chr",	"start",	"end",
                 "strand",	"biotype")
 
 output <- cbind(annot.protein[1:N[["pairs"]], annot.cols], 
-                round(result.table, 5),
+                result.table, 5,
                 round(lods,4),
                 round(averages.mrna,4), 
                 round(averages.protein,4))
