@@ -15,7 +15,19 @@ knitr::read_chunk("chunks.R")
 
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
-This is the analysis of Age/Sex effect mediation by mRNA using p-values (new version). All plots are interactive (tooltip = gene symbol) and have been generated from R/Markdown file [new-med-plots.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/new-med-plots.Rmd).
+For each protein, we have fitted ANOVA model
+
+$$ Protein \sim Age + Sex+Generation$$
+
+and a model with a corresponding RNA expression included in covariates
+
+$$ Protein \sim Age + Sex+Generation+mRNA$$
+
+Let us assume Age/Sex effect is highly significant in the first model (p-value close to zero). If the effect is mediated by mRNA expression (Age/Sex -> mRNA -> Protein) then the dependence in the second model should be much weaker (i.e. p-value higher). 
+
+If Age/Sex effect skip mRNA-level and influence protein expression directly, i.e. the effect is not mediated by mRNA, then we expect p-value not to change (or even decrease if strong mRNA-Protein relationship explains part of noise).
+
+All plots are interactive (tooltip = gene symbol), use `-log(p)` transformed p-values and have been generated from R/Markdown file [new-med-plots.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/new-med-plots.Rmd).
 
 ## Kidney
 
