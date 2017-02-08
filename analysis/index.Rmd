@@ -15,6 +15,9 @@ An unpublished analysis of aging [Diversity Outbred](https://www.jax.org/strain/
 * [Histograms](pval-histograms.html) of Sex/Age ANOVA tests' p-values.
 * [PCA plots](pca.html) - The scatter plot of the first two principal components for kidney/heart on mRNA-/protein-level.
 
+#### Shiny apps:
+* [Effect Mediation](http://churchilldev.jax.org:49194/effectmed/) - JAX network only.
+
 #### You can also access:
 
 * [Dataset](https://github.com/simecek/TheAgingProteome/tree/master/data) (Original .RData data files)
