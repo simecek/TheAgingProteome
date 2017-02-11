@@ -79,7 +79,7 @@ We used `p.adjust` function (Benjamini & Hochberg method) to adjust ANOVA p-valu
 
 We conclude that while Age/Sex effects are shared between heart and kidney on mRNA level, those effects seem to be tissue specific for proteins.
 
-The report has been generated from R/Markdown file [pvals_kidney_vs_heart.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pvals-kidney_vs_heart.Rmd).
+The report has been generated from R/Markdown file [pvals_kidney_vs_heart.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pvals_kidney_vs_heart.Rmd).
 
 \ 
 
