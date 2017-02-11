@@ -308,7 +308,7 @@ div.tocify {
 
 
 <p><strong>Last updated:</strong> 2017-02-10</p>
-<p><strong>Code version:</strong> 071df82</p>
+<p><strong>Code version:</strong> 77019a2</p>
 <p>There are totally 3560 gene-protein pairs detected both in heart and kidney tissues.</p>
 <p>We used <code>p.adjust</code> function (Benjamini &amp; Hochberg method) to adjust ANOVA p-values for Age and Sex effects to multiple testing. Then we used Fisher exact test (as implemented in <code>fisher.test</code>) to examine whether age / sex dependent genes / proteins in one tissue are also more likely to be age / sex dependent in the other tissue (<span class="math inline">\(fdr&lt;5\%\)</span>).</p>
 <p>We conclude that while Age/Sex effects are shared between heart and kidney on mRNA level, those effects seem to be tissue specific for proteins.</p>
@@ -336,6 +336,13 @@ div.tocify {
 <h2>Protein / Sex Effect</h2>
 <p><img src="figure/pvals_kidney_vs_heart.Rmd/prot_sex-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>There seems to be no statistically significant relation between whether a protein is correlated to Sex in heart and kidney (Fisher Exact Test, odds ratio = 1.13, p-value = 0.183).</p>
+<p> </p>
+</div>
+<div id="log10p-scatterplots" class="section level2">
+<h2>-log10(p) Scatterplots</h2>
+<p>A comparison of unadjusted p-values for Age / Sex on mRNA / protein level effect between kidney and heart.</p>
+<p><img src="figure/pvals_kidney_vs_heart.Rmd/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p> </p>
 </div>
 <div id="session-information" class="section level2">
 <h2>Session Information</h2>
@@ -356,16 +363,19 @@ attached base packages:
 [8] base     
 
 other attached packages:
-[1] VennDiagram_1.6.17  futile.logger_1.4.3 dplyr_0.5.0        
+[1] scales_0.4.1        gridExtra_2.2.1     ggplot2_2.2.1      
+[4] VennDiagram_1.6.17  futile.logger_1.4.3 dplyr_0.5.0        
 
 loaded via a namespace (and not attached):
- [1] workflowr_0.3.0      Rcpp_0.12.9          digest_0.6.11       
- [4] rprojroot_1.2        assertthat_0.1       R6_2.2.0            
- [7] futile.options_1.0.0 DBI_0.5-1            backports_1.0.4     
-[10] git2r_0.18.0         magrittr_1.5         evaluate_0.10       
-[13] stringi_1.1.2        rmarkdown_1.3        lambda.r_1.1.9      
-[16] tools_3.3.2          stringr_1.1.0        yaml_2.1.14         
-[19] htmltools_0.3.5      knitr_1.15.1         tibble_1.2          </code></pre>
+ [1] Rcpp_0.12.9          knitr_1.15.1         magrittr_1.5        
+ [4] workflowr_0.3.0      munsell_0.4.3        colorspace_1.3-2    
+ [7] R6_2.2.0             plyr_1.8.4           stringr_1.1.0       
+[10] tools_3.3.2          gtable_0.2.0         DBI_0.5-1           
+[13] lambda.r_1.1.9       git2r_0.18.0         htmltools_0.3.5     
+[16] lazyeval_0.2.0       yaml_2.1.14          assertthat_0.1      
+[19] rprojroot_1.2        digest_0.6.11        tibble_1.2          
+[22] futile.options_1.0.0 evaluate_0.10        rmarkdown_1.3       
+[25] stringi_1.1.2        backports_1.0.4     </code></pre>
 </div>
 
 <hr>

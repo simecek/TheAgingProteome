@@ -147,9 +147,90 @@ There seems to be no statistically significant relation between whether a protei
 
 ```{r del_logs, echo=FALSE}
 logs <- dir(pattern="^VennDiagram.*log")
-stopifnot(file.remove(logs))
+logs2 <- dir("../docs/", pattern="^VennDiagram.*log", full.names = TRUE)
+stopifnot(file.remove(c(logs,logs2)))
 ```
 
+\ 
+
+## -log10(p) Scatterplots
+
+A comparison of unadjusted p-values for Age / Sex on mRNA / protein level effect between kidney and heart.
+
+```{r, echo=FALSE, fig.width=6, fig.height=6}
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(gridExtra))
+suppressPackageStartupMessages(library(scales))
+
+# -log10(p) transformation for ggplot
+reverselog_trans <- function(base = exp(1)) {
+    trans <- function(x) -log(x, base)
+    inv <- function(x) base^(-x)
+    trans_new(paste0("reverselog-", format(base)), trans, inv, 
+              log_breaks(base = base), 
+              domain = c(1e-100, Inf))
+}
+
+# re-join anova tables
+# to remove p-value adjustment
+dt3 <- inner_join(dt1, dt2, by="id", suffix=c("kidney", "heart"))
+
+p1 <- ggplot(dt3,
+        aes(x=p.mRNA_Age.Sexkidney,
+        y=p.mRNA_Age.Sexheart)) + 
+  geom_point(alpha=0.2, size=3) +
+  geom_abline(intercept = 0, slope = 1, color="red") +
+  scale_x_continuous(trans=reverselog_trans(10), lim=c(1,1e-11)) +
+  scale_y_continuous(trans=reverselog_trans(10),lim=c(1,1e-11)) +
+  theme_bw() +
+  labs(title="mRNA", 
+       subtitle="Age",
+       x="p-value (kidney)",
+       y="p-value (heart)")
+
+p2 <- ggplot(dt3,
+        aes(x=p.mRNA_Sex.Agekidney,
+        y=p.mRNA_Sex.Ageheart)) + 
+  geom_point(alpha=0.2, size=3) +
+  geom_abline(intercept = 0, slope = 1, color="red") +
+  scale_x_continuous(trans=reverselog_trans(10), lim=c(1,1e-46)) +
+  scale_y_continuous(trans=reverselog_trans(10),lim=c(1,1e-46)) +
+  theme_bw() +
+  labs(title="mRNA", 
+       subtitle="Sex",
+       x="p-value (kidney)",
+       y="p-value (heart)")
+
+p3 <- ggplot(dt3,
+        aes(x=p.Prot_Age.Sexkidney,
+        y=p.Prot_Age.Sexheart)) + 
+  geom_point(alpha=0.2, size=3) +
+  geom_abline(intercept = 0, slope = 1, color="red") +
+  scale_x_continuous(trans=reverselog_trans(10), lim=c(1,1e-28)) +
+  scale_y_continuous(trans=reverselog_trans(10),lim=c(1,1e-28)) +
+  theme_bw() +
+  labs(title="Protein", 
+       subtitle="Age",
+       x="p-value (kidney)",
+       y="p-value (heart)")
+
+p4 <- ggplot(dt3,
+        aes(x=p.Prot_Sex.Agekidney,
+        y=p.Prot_Sex.Ageheart)) + 
+  geom_point(alpha=0.2, size=3) +
+  geom_abline(intercept = 0, slope = 1, color="red") +
+  scale_x_continuous(trans=reverselog_trans(10), lim=c(1,1e-46)) +
+  scale_y_continuous(trans=reverselog_trans(10),lim=c(1,1e-46)) +
+  theme_bw() +
+  labs(title="Protein", 
+       subtitle="Sex",
+       x="p-value (kidney)",
+       y="p-value (heart)")
+
+grid.arrange(p1, p2, p3, p4, ncol = 2)
+```
+
+\ 
 
 ## Session Information
 
