@@ -131,7 +131,7 @@ There seems to be no statistically significant relation between whether a protei
 
 \ 
 
-## Prot / Sex Effect
+## Protein / Sex Effect
 
 ```{r prot_sex, echo=FALSE}
 # mRNA / Age
@@ -144,6 +144,12 @@ grid.draw(pl)
 ```
 
 There seems to be no statistically significant relation between whether a protein is correlated to Sex in heart and kidney (Fisher Exact Test, odds ratio = `r round(fisher.test(tab)$estimate,2)`, p-value `r pval.output(fisher.test(tab)$p.value)`).
+
+```{r del_logs, echo=FALSE}
+logs <- dir(pattern="^VennDiagram.*log")
+stopifnot(file.remove(logs))
+```
+
 
 ## Session Information
 
