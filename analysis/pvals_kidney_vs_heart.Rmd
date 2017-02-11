@@ -1,0 +1,151 @@
+---
+title: "Heart vs. Kidney Comparison"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+```{r read_data, echo=FALSE}
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(VennDiagram))
+
+# load result tables
+dt1 <- read.csv("../../kidney2/kidney_anova_table.csv", as.is=TRUE)
+dt2<- read.csv("../../heart2/heart_anova_table.csv", as.is=TRUE) 
+
+# make shared results table
+dt <- inner_join(dt1, dt2, by="id", suffix=c("kidney", "heart"))
+
+# adjust all p-values
+p.val.cols <- grep("^p[.]", names(dt))
+for (i in p.val.cols) {
+  dt[,i] <- p.adjust(dt[,i], method="BH")
+}
+
+# venn diagram plotting function
+my.venn <- function(set.kidney, set.heart, title) {
+  venn.diagram( main = title,
+                main.cex = sqrt(2),
+                x = list(set.kidney , set.heart),
+                category.names = c("Kidney" , "Heart"),
+                output = TRUE ,
+                filename=NULL,
+                imagetype="png" ,
+                height = 480 , 
+                width = 480 , 
+                resolution = 300,
+                compression = "lzw",
+                lwd = 2,
+                lty = 'blank',
+                fill = c('yellow', 'green'),
+                cex = 1,
+                fontface = "bold",
+                fontfamily = "sans",
+                cat.cex = 1.2,
+                cat.fontface = "bold",
+                main.fontface="bold",
+                #  cat.default.pos = "outer",
+                cat.pos = c(-27, 27),
+                cat.dist = c(0.055, 0.055),
+                cat.fontfamily = "sans",
+                main.fontfamily = "sans",
+                #  rotation = 1
+                )
+}
+
+pval.output <- function(p) {
+  if (p<0.001) 
+    return("< 0.001") 
+  else 
+    paste("=",round(p,3))
+}
+  
+```
+
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+There are totally `r nrow(dt)` gene-protein pairs detected both in heart and kidney tissues. 
+
+We used `p.adjust` function (Benjamini & Hochberg method) to adjust ANOVA p-values for Age and Sex effects to multiple testing. Then we used Fisher exact test (as implemented in `fisher.test`) to examine whether age / sex dependent genes / proteins in one tissue are also more likely to be age / sex dependent in the other tissue ($fdr<5\%$).
+
+We conclude that while Age/Sex effects are shared between heart and kidney on mRNA level, those effects seem to be tissue specific for proteins.
+
+The report has been generated from R/Markdown file [pvals-kidney_vs_heart.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pvals-kidney_vs_heart.Rmd).
+
+\ 
+
+## mRNA / Age Effect
+
+```{r mrna_age, echo=FALSE}
+# mRNA / Age
+set1 <- dt$id[dt$p.mRNA_Age.Sexkidney < 0.05]
+set2 <- dt$id[dt$p.mRNA_Age.Sexheart < 0.05]
+pl <- my.venn(set1, set2, title="")
+tab <- table(dt$id %in% set1, dt$id %in% set2)
+grid.draw(pl)
+#grid.newpage()
+```
+
+Genes changing with Age in a heart have significantly higher chance to change also in a kidney and vise verse (Fisher Exact Test, odds ratio = `r round(fisher.test(tab)$estimate,2)`, p-value `r pval.output(fisher.test(tab)$p.value)`).
+
+\ 
+
+## mRNA / Sex Effect
+
+```{r mrna_sex, echo=FALSE}
+# mRNA / Age
+set1 <- dt$id[dt$p.mRNA_Sex.Agekidney < 0.05]
+set2 <- dt$id[dt$p.mRNA_Sex.Ageheart < 0.05]
+pl <- my.venn(set1, set2, title="")
+tab <- table(dt$id %in% set1, dt$id %in% set2)
+grid.draw(pl)
+#grid.newpage()
+```
+
+Genes changing with Sex in a heart have significantly higher chance to change also in a kidney and vise verse (Fisher Exact Test, odds ratio = `r round(fisher.test(tab)$estimate,2)`, p-value `r pval.output(fisher.test(tab)$p.value)`).
+
+\ 
+
+## Protein / Age Effect
+
+```{r protein_age, echo=FALSE}
+# Prot / Age
+set1 <- dt$id[dt$p.Prot_Age.Sexkidney < 0.05]
+set2 <- dt$id[dt$p.Prot_Age.Sexheart < 0.05]
+pl <- my.venn(set1, set2, title="")
+tab <- table(dt$id %in% set1, dt$id %in% set2)
+grid.draw(pl)
+#grid.newpage()
+```
+
+There seems to be no statistically significant relation between whether a protein is correlated to Age in heart and kidney (Fisher Exact Test, odds ratio = `r round(fisher.test(tab)$estimate,2)`, p-value `r pval.output(fisher.test(tab)$p.value)`).
+
+\ 
+
+## Prot / Sex Effect
+
+```{r prot_sex, echo=FALSE}
+# mRNA / Age
+set1 <- dt$id[dt$p.Prot_Sex.Agekidney < 0.05]
+set2 <- dt$id[dt$p.Prot_Sex.Ageheart < 0.05]
+pl <- my.venn(set1, set2, title="")
+tab <- table(dt$id %in% set1, dt$id %in% set2)
+grid.draw(pl)
+#grid.newpage()
+```
+
+There seems to be no statistically significant relation between whether a protein is correlated to Sex in heart and kidney (Fisher Exact Test, odds ratio = `r round(fisher.test(tab)$estimate,2)`, p-value `r pval.output(fisher.test(tab)$p.value)`).
+
+## Session Information
+
+```{r session-info}
+```

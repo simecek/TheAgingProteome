@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Petr Simecek" />
 
 
-<title>Home</title>
+<title>Heart vs. Kidney Comparison</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
@@ -162,6 +166,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -202,37 +301,71 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Heart vs. Kidney Comparison</h1>
+<h4 class="author"><em>Petr Simecek</em></h4>
 
 </div>
 
 
-<p>An unpublished analysis of aging <a href="https://www.jax.org/strain/009376">Diversity Outbred</a> (mouse) kidney/heart expression data.</p>
-<div id="reports" class="section level4">
-<h4>Reports:</h4>
-<ul>
-<li><a href="pval-historgrams.html">Kidney vs. Heart</a> - Comparison of Sex and Age dependent genes and proteins.</li>
-<li><a href="examples.html">Mediation Examples</a> - A few selected examples of Age/Sex effect on kidney/heart protein expression.</li>
-<li><a href="new-med-plots.html">Age/Sex Effect Mediation</a> - Is Age/Sex Effect On Protein Expression Mediated by RNA? (p-value version)</li>
-<li><a href="old-med-plots.html">Age/Sex Effect Mediation2</a> - Is Age/Sex Effect On Protein Expression Mediated by RNA? (LOD version)</li>
-<li><a href="pval-histograms.html">Histograms</a> of Sex/Age ANOVA tests’ p-values.</li>
-<li><a href="pca.html">PCA plots</a> - The scatter plot of the first two principal components for kidney/heart on mRNA-/protein-level.</li>
-</ul>
+<p><strong>Last updated:</strong> 2017-02-10</p>
+<p><strong>Code version:</strong> 8c40f48</p>
+<p>There are totally 3560 gene-protein pairs detected both in heart and kidney tissues.</p>
+<p>We used <code>p.adjust</code> function (Benjamini &amp; Hochberg method) to adjust ANOVA p-values for Age and Sex effects to multiple testing. Then we used Fisher exact test (as implemented in <code>fisher.test</code>) to examine whether age / sex dependent genes / proteins in one tissue are also more likely to be age / sex dependent in the other tissue (<span class="math inline">\(fdr&lt;5\%\)</span>).</p>
+<p>We conclude that while Age/Sex effects are shared between heart and kidney on mRNA level, those effects seem to be tissue specific for proteins.</p>
+<p>The report has been generated from R/Markdown file <a href="https://github.com/simecek/TheAgingProteome/blob/master/analysis/pvals-kidney_vs_heart.Rmd">pvals-kidney_vs_heart.Rmd</a>.</p>
+<p> </p>
+<div id="mrna-age-effect" class="section level2">
+<h2>mRNA / Age Effect</h2>
+<p><img src="figure/pvals_kidney_vs_heart.Rmd/mrna_age-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Genes changing with Age in a heart have significantly higher chance to change also in a kidney and vise verse (Fisher Exact Test, odds ratio = 3.82, p-value &lt; 0.001).</p>
+<p> </p>
 </div>
-<div id="shiny-apps" class="section level4">
-<h4>Shiny apps:</h4>
-<ul>
-<li><a href="http://churchilldev.jax.org:49194/effectmed/">Effect Mediation</a> - JAX network only.</li>
-</ul>
+<div id="mrna-sex-effect" class="section level2">
+<h2>mRNA / Sex Effect</h2>
+<p><img src="figure/pvals_kidney_vs_heart.Rmd/mrna_sex-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Genes changing with Sex in a heart have significantly higher chance to change also in a kidney and vise verse (Fisher Exact Test, odds ratio = 1.43, p-value &lt; 0.001).</p>
+<p> </p>
 </div>
-<div id="you-can-also-access" class="section level4">
-<h4>You can also access:</h4>
-<ul>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/data">Dataset</a> (Original .RData data files)</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/output">Processed data</a> (ANOVA &amp; PCA results)</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/code">Scripts</a> and <a href="https://github.com/simecek/TheAgingProteome/blob/master/Makefile">Makefile</a> used for data processing</li>
-<li><a href="https://github.com/simecek/TheAgingProteome/tree/master/analysis">RMarkdown files</a> generating the reports above</li>
-</ul>
+<div id="protein-age-effect" class="section level2">
+<h2>Protein / Age Effect</h2>
+<p><img src="figure/pvals_kidney_vs_heart.Rmd/protein_age-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>There seems to be no statistically significant relation between whether a protein is correlated to Age in heart and kidney (Fisher Exact Test, odds ratio = 0.93, p-value = 0.343).</p>
+<p> </p>
+</div>
+<div id="prot-sex-effect" class="section level2">
+<h2>Prot / Sex Effect</h2>
+<p><img src="figure/pvals_kidney_vs_heart.Rmd/prot_sex-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>There seems to be no statistically significant relation between whether a protein is correlated to Sex in heart and kidney (Fisher Exact Test, odds ratio = 1.13, p-value = 0.183).</p>
+</div>
+<div id="session-information" class="section level2">
+<h2>Session Information</h2>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.3.2 (2016-10-31)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 7 x64 (build 7601) Service Pack 1
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] grid      stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+[1] VennDiagram_1.6.17  futile.logger_1.4.3 dplyr_0.5.0        
+
+loaded via a namespace (and not attached):
+ [1] workflowr_0.3.0      Rcpp_0.12.9          digest_0.6.11       
+ [4] rprojroot_1.2        assertthat_0.1       R6_2.2.0            
+ [7] futile.options_1.0.0 DBI_0.5-1            backports_1.0.4     
+[10] git2r_0.18.0         magrittr_1.5         evaluate_0.10       
+[13] stringi_1.1.2        rmarkdown_1.3        lambda.r_1.1.9      
+[16] tools_3.3.2          stringr_1.1.0        yaml_2.1.14         
+[19] htmltools_0.3.5      knitr_1.15.1         tibble_1.2          </code></pre>
 </div>
 
 <hr>
@@ -261,6 +394,8 @@ $(document).ready(function () {
 -->
 
 
+</div>
+</div>
 
 </div>
 

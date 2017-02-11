@@ -9,6 +9,7 @@ An unpublished analysis of aging [Diversity Outbred](https://www.jax.org/strain/
 
 #### Reports:
 
+* [Kidney vs. Heart](pval-historgrams.html) - Comparison of Sex and Age dependent genes and proteins.
 * [Mediation Examples](examples.html) - A few selected examples of Age/Sex effect on kidney/heart protein expression. 
 * [Age/Sex Effect Mediation](new-med-plots.html) - Is Age/Sex Effect On Protein Expression Mediated by RNA? (p-value version)
 * [Age/Sex Effect Mediation2](old-med-plots.html) - Is Age/Sex Effect On Protein Expression Mediated by RNA? (LOD version)
