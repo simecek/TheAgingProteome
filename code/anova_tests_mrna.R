@@ -13,12 +13,12 @@ library(broom)
 
 # Options -----------------------------------------------------------------
 
-args <- commandArgs(trailingOnly = TRUE)
+# args <- commandArgs(trailingOnly = TRUE)
 
 # for kidney
-# args = list("../kidney2/R/DO188b_kidney_noprobs.RData", "../kidney2/kidney_anova_table.csv")
+args = list("../kidney2/R/DO188b_kidney_noprobs.RData", "../kidney2/kidney_anova_mrna_table.csv")
 # for heart
-# args = list("../heart2/DO189_heart_v2_noprobs.RData", "../heart2/heart_anova_table.csv")
+# args = list("../heart2/DO189_heart_v2_noprobs.RData", "../heart2/heart_anova_mrna_table.csv")
 
 # two arguments expected (input and output files)
 stopifnot(length(args)==2)
@@ -98,10 +98,10 @@ for (i in 1:ncol(expr.mrna)) {
 # Output ------------------------------------------------------------------
 
 annot.cols <- c("id",	"symbol",	"chr",	"start",	"end",
-                "strand",	"biotype")
+                "strand",	"biotype", "duplicated")
 
-output <- cbind(annot.mrna, annot.cols], 
-                result.table, 5,
+output <- cbind(annot.mrna[, annot.cols], 
+                result.table,
                 round(averages.mrna,4))
 # remove mRNAs that are there twice because of pairing
 output <- subset(output, !duplicated)
