@@ -45,7 +45,7 @@ pca.both$Sex <- as.numeric(factor(pca.both$Sex_kidney))
 
 Three PCA comparisons: tissue differences (kidney vs. heart), level differences (mRNA vs. protein) and subsetting differences (all vs. only genes with protein).
 
-The report has been generated from R/Markdown file [pca_comparisons.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pca_comparisons.Rmd).
+The report has been generated from R/Markdown file [pca_comparison.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pca_comparison.Rmd).
 
 ## Kidney vs. Heart
 
