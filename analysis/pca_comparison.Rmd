@@ -1,0 +1,130 @@
+---
+title: "PCA Contrast And Compare"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+```{r data_load, echo=FALSE}
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(corrplot))
+
+# kidney data
+pca.kidney <- read.csv("../../kidney2/kidney_pca_predict.csv", as.is=TRUE)
+pca.kidney.mrna <- read.csv("../../kidney2/kidney_pca_predict_mrna.csv", as.is=TRUE)
+pca.kidney.joined <- inner_join(pca.kidney,
+                      pca.kidney.mrna, 
+                  by = c("Mouse.ID","Sex","Age"),
+                  suffix = c("_subset", "_all"))
+# heart data
+pca.heart <- read.csv("../../heart2/heart_pca_predict.csv", as.is=TRUE)
+pca.heart.mrna <- read.csv("../../heart2/heart_pca_predict_mrna.csv", as.is=TRUE)
+pca.heart.joined <- inner_join(pca.heart,
+                      pca.heart.mrna, 
+                  by = c("Mouse.ID","Sex","Age"),
+                  suffix = c("_subset", "_all"))
+# join of kidney & heart data into one table
+pca.both <- inner_join(pca.kidney, pca.heart, 
+                  by = "Mouse.ID",
+                  suffix = c("_kidney", "_heart"))
+
+# for ploting
+pca.both$Age <- pca.both$Age_kidney
+pca.both$Sex <- as.numeric(factor(pca.both$Sex_kidney))
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+Three PCA comparisons: tissue differences (kidney vs. heart), level differences (mRNA vs. protein) and subsetting differences (all vs. only genes with protein).
+
+The report has been generated from R/Markdown file [pca_comparisons.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/pca_comparisons.Rmd).
+
+## Kidney vs. Heart
+
+### mRNA-level
+
+```{r kh_mrna, echo=FALSE}
+sex.age <- grep("^(Sex|Age)$", names(pca.both))
+set1 <- c(sex.age, grep("mrna_kidney$", names(pca.both)))
+set2 <- c(sex.age, grep("mrna_heart$", names(pca.both)))
+
+tmpcor <- cor(pca.both[,set1],pca.both[,set2])
+corrplot(tmpcor)
+```
+
+### Protein-level
+
+```{r kh_prot, echo=FALSE}
+sex.age <- grep("^(Sex|Age)$", names(pca.both))
+set1 <- c(sex.age, grep("prot_kidney$", names(pca.both)))
+set2 <- c(sex.age, grep("prot_heart$", names(pca.both)))
+
+tmpcor <- cor(pca.both[,set1],pca.both[,set2])
+corrplot(tmpcor)
+```
+
+## mRNA vs Protein
+
+### Kidney
+
+```{r mp_kidney, echo=FALSE}
+pca.kidney$Sex <- as.numeric(factor(pca.kidney$Sex))
+sex.age <- grep("^(Sex|Age)$", names(pca.kidney))
+set1 <- c(sex.age, grep("mrna$", names(pca.kidney)))
+set2 <- c(sex.age, grep("prot$", names(pca.kidney)))
+
+tmpcor <- cor(pca.kidney[,set1],pca.kidney[,set2])
+corrplot(tmpcor)
+```
+
+### Heart
+
+```{r mp_heart, echo=FALSE}
+pca.heart$Sex <- as.numeric(factor(pca.heart$Sex))
+sex.age <- grep("^(Sex|Age)$", names(pca.heart))
+set1 <- c(sex.age, grep("mrna$", names(pca.heart)))
+set2 <- c(sex.age, grep("prot$", names(pca.heart)))
+
+tmpcor <- cor(pca.heart[,set1],pca.heart[,set2])
+corrplot(tmpcor)
+```
+
+## All genes vs. genes with protein only
+
+### Kidney
+
+```{r full_kidney, echo=FALSE}
+pca.kidney.joined$Sex <- as.numeric(factor(pca.kidney.joined$Sex))
+sex.age <- grep("^(Sex|Age)$", names(pca.kidney.joined))
+set1 <- c(sex.age, grep("mrna_all$", names(pca.kidney.joined)))
+set2 <- c(sex.age, grep("mrna_subset$", names(pca.kidney.joined)))
+
+tmpcor <- cor(pca.kidney.joined[,set1],pca.kidney.joined[,set2])
+corrplot(tmpcor)
+```
+
+### Heart
+
+```{r full_heart, echo=FALSE}
+pca.heart.joined$Sex <- as.numeric(factor(pca.heart.joined$Sex))
+sex.age <- grep("^(Sex|Age)$", names(pca.heart.joined))
+set1 <- c(sex.age, grep("mrna_all$", names(pca.heart.joined)))
+set2 <- c(sex.age, grep("mrna_subset$", names(pca.heart.joined)))
+
+tmpcor <- cor(pca.heart.joined[,set1],pca.heart.joined[,set2])
+corrplot(tmpcor)
+```
+
+
+## Session Information
+
+```{r session-info}
+```

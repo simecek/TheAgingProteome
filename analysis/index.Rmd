@@ -15,6 +15,7 @@ An unpublished analysis of aging [Diversity Outbred](https://www.jax.org/strain/
 * [Age/Sex Effect Mediation2](old-med-plots.html) - Is Age/Sex Effect On Protein Expression Mediated by RNA? (LOD version)
 * [Histograms](pval-histograms.html) of Sex/Age ANOVA tests' p-values.
 * [PCA plots](pca.html) - The scatter plot of the first two principal components for kidney/heart on mRNA-/protein-level.
+* [PCA comparisons](pca_comparisons.html) - Are PCAs correlated between tissues or levels?
 
 #### Shiny apps:
 * [Effect Mediation](http://churchilldev.jax.org:49194/effectmed/) - JAX network only.
