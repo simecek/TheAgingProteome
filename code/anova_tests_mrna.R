@@ -13,10 +13,10 @@ library(broom)
 
 # Options -----------------------------------------------------------------
 
-# args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 
 # for kidney
-args = list("../kidney2/R/DO188b_kidney_noprobs.RData", "../kidney2/kidney_anova_mrna_table.csv")
+# args = list("../kidney2/R/DO188b_kidney_noprobs.RData", "../kidney2/kidney_anova_mrna_table.csv")
 # for heart
 # args = list("../heart2/DO189_heart_v2_noprobs.RData", "../heart2/heart_anova_mrna_table.csv")
 
