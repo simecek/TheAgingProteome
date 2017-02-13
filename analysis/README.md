@@ -1,5 +1,6 @@
 # Reports
 
+* [predict-glmnet.Rmd](predict-glmnet.Rmd) - Could we predict Age and Sex from mRNA/protein expression?
 * [pvals_kidney_vs_heart.Rmd](pvals_kidney_vs_heart.Rmd) - Comparison of Sex and Age dependent genes and proteins.
 * [examples.Rmd](examples.Rmd) - A few selected examples of Age/Sex effect on kidney/heart protein expression. 
 * [new-med-plots.Rmd](new-med-plots.Rmd) - Is Age/Sex Effect On Protein Expression Mediated by RNA? (p-value version)

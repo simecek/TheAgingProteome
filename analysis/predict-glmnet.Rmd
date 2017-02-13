@@ -1,0 +1,230 @@
+---
+title: "GLMNET Predictions"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+```{r read_data, include=FALSE}
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(broom))
+suppressPackageStartupMessages(library(gridExtra))
+
+pred.kidney <- read.csv("../../kidney2/kidney_predict_glmnet.csv", as.is=TRUE)
+pred.heart <- read.csv("../../heart2/heart_predict_glmnet.csv", as.is=TRUE)
+
+# for shared samples, join the predictions into one table
+pred.both <- inner_join(pred.kidney, pred.heart, 
+                  by = c("Mouse.ID", "Sex", "Age", "Generation"),
+                  suffix = c("_kidney", "_heart"))
+
+# function for outputing p-values
+pval.output <- function(p) {
+  if (p<0.001) 
+    return("< 0.001") 
+  else 
+    paste("=",round(p,3))
+}
+
+```
+
+The report has been generated from R/Markdown file [predict-glmnet.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/predict-glmnet.Rmd). Glmnet predictions have been calculated by [predict_glmnet.R](https://github.com/simecek/TheAgingProteome/blob/master/code/predict_glmnet.R) script.
+
+## Quality of Predictions
+
+### Age
+
+```{r qt_age, echo=FALSE}
+quality.table <- NULL
+cols <- c("Age.prot_kidney", "Age.prot_heart", 
+          "Age.mrna_kidney", "Age.mrna_heart")
+for (c in cols) {
+  new.line <- data.frame(variable = c,
+                         se = sqrt(mean((pred.both[,c] - pred.both[,"Age"])^2)),
+                         cor = cor(pred.both[,c], pred.both[,"Age"]))
+  quality.table <- rbind(quality.table, new.line)
+}
+
+knitr::kable(quality.table, digits = 2, format = "markdown")
+```
+
+```{r quality_kidney_age, echo=FALSE, fig.width=8, fig.height=8}
+p1 <- ggplot(pred.both, aes(x=Age, y= Age.mrna_heart, group=Age)) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(aes(color=factor(Sex)), width = 0.25) +
+  labs(title = "mRNA", subtitle = "Heart") +
+  theme(legend.position="none")
+p2 <- ggplot(pred.both, aes(x=Age, y= Age.mrna_kidney, group=Age)) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(aes(color=factor(Sex)), width = 0.25) +
+  labs(title = "mRNA", subtitle = "Kidney") +
+  theme(legend.position="none")
+p3 <- ggplot(pred.both, aes(x=Age, y= Age.prot_heart, group=Age)) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(aes(color=factor(Sex)), width = 0.25) +
+  labs(title = "Protein", subtitle = "Heart") +
+  theme(legend.position="none")
+p4 <- ggplot(pred.both, aes(x=Age, y= Age.prot_kidney, group=Age)) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(aes(color=factor(Sex)), width = 0.25) +
+  labs(title = "Protein", subtitle = "Kidney") +
+  theme(legend.position="none")
+grid.arrange(p4, p3, p2, p1, ncol = 2)
+```
+
+
+### Sex 
+
+```{r qt_sex, echo=FALSE}
+quality.table <- NULL
+cols <- c("Sex.prot_kidney", "Sex.prot_heart", 
+          "Sex.mrna_kidney", "Sex.mrna_heart")
+for (c in cols) {
+  new.line <- data.frame(variable = c,
+                         se = sqrt(mean((pred.both[,c] - pred.both[,"Sex"])^2)),
+                         cor = cor(pred.both[,c], pred.both[,"Sex"]))
+  quality.table <- rbind(quality.table, new.line)
+}
+
+knitr::kable(quality.table, digits = 2, format = "markdown")
+```
+
+```{r quality_kidney_sex, echo=FALSE, fig.width=8, fig.height=8}
+p1 <- ggplot(pred.both, aes(x=Sex, y= Sex.mrna_heart, group=Sex)) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(aes(color=factor(Age)), width = 0.25) +
+  labs(title = "mRNA", subtitle = "Heart") +
+  theme(legend.position="none")
+p2 <- ggplot(pred.both, aes(x=Sex, y= Sex.mrna_kidney, group=Sex)) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(aes(color=factor(Age)), width = 0.25) +
+  labs(title = "mRNA", subtitle = "Kidney") +
+  theme(legend.position="none")
+p3 <- ggplot(pred.both, aes(x=Sex, y= Sex.prot_heart, group=Sex)) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(aes(color=factor(Age)), width = 0.25) +
+  labs(title = "Protein", subtitle = "Heart") +
+  theme(legend.position="none")
+p4 <- ggplot(pred.both, aes(x=Sex, y= Sex.prot_kidney, group=Sex)) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(aes(color=factor(Age)), width = 0.25) +
+  labs(title = "Protein", subtitle = "Kidney") +
+  theme(legend.position="none")
+grid.arrange(p4, p3, p2, p1, ncol = 2)
+```
+
+## Comparison between tissues 
+
+### Age - mRNA
+
+```{r sod_age_mrna, echo=FALSE, fig.width=5, fig.height=5}
+pval <- subset(tidy(anova(lm(Age.mrna_kidney ~ factor(Age) + Age.mrna_heart, data=pred.both))), term=="Age.mrna_heart")$p.value
+
+ggplot(pred.both, aes(x=Age.mrna_kidney, y= Age.mrna_heart, color=factor(Age), shape=factor(Sex))) +
+  geom_point() +
+  labs(title = "Age / mRNA", 
+       subtitle = paste("p-value", pval.output(pval))) +
+  theme(legend.position="none")
+```
+
+### Age - protein
+
+```{r sod_age_prot, echo=FALSE, fig.width=5, fig.height=5}
+pval <- subset(tidy(anova(lm(Age.prot_kidney ~ factor(Age) + Age.prot_heart, data=pred.both))), term=="Age.prot_heart")$p.value
+
+ggplot(pred.both, aes(x=Age.prot_kidney, y= Age.prot_heart, color=factor(Age), shape=factor(Sex))) +
+  geom_point() +
+  labs(title = "Age / protein", 
+       subtitle = paste("p-value", pval.output(pval))) +
+  theme(legend.position="none")
+```
+
+### Sex - mRNA
+
+```{r sod_Sex_mrna, echo=FALSE, fig.width=5, fig.height=5}
+pval <- subset(tidy(anova(lm(Sex.mrna_kidney ~ factor(Sex) + Sex.mrna_heart, data=pred.both))), term=="Sex.mrna_heart")$p.value
+
+ggplot(pred.both, aes(x=Sex.mrna_kidney, y= Sex.mrna_heart, color=factor(Sex), shape=factor(Age))) +
+  geom_point() +
+  labs(title = "Sex / mRNA", 
+       subtitle = paste("p-value", pval.output(pval))) +
+  theme(legend.position="none")
+```
+
+### Sex - protein
+
+```{r sod_Sex_prot, echo=FALSE, fig.width=5, fig.height=5}
+pval <- subset(tidy(anova(lm(Sex.prot_kidney ~ factor(Sex) + Sex.prot_heart, data=pred.both))), term=="Sex.prot_heart")$p.value
+
+ggplot(pred.both, aes(x=Sex.prot_kidney, y= Sex.prot_heart, color=factor(Sex), shape=factor(Age))) +
+  geom_point() +
+  labs(title = "Sex / protein", 
+       subtitle = paste("p-value", pval.output(pval))) +
+  theme(legend.position="none")
+```
+
+## Comparison between mRNA and protein levels
+
+### Age - Kidney
+
+```{r sod_age_kidney, echo=FALSE, fig.width=5, fig.height=5}
+pval <- subset(tidy(anova(lm(Age.mrna ~ factor(Age) + Age.prot, data=pred.kidney))), term=="Age.prot")$p.value
+
+ggplot(pred.kidney, aes(x=Age.mrna, y= Age.prot, color=factor(Age), shape=factor(Sex))) +
+  geom_point() +
+  labs(title = "Age / Kidney", 
+       subtitle = paste("p-value", pval.output(pval))) +
+  theme(legend.position="none")
+```
+
+### Age - Heart
+
+```{r sod_age_heart, echo=FALSE, fig.width=5, fig.height=5}
+pval <- subset(tidy(anova(lm(Age.mrna ~ factor(Age) + Age.prot, data=pred.heart))), term=="Age.prot")$p.value
+
+ggplot(pred.heart, aes(x=Age.mrna, y= Age.prot, color=factor(Age), shape=factor(Sex))) +
+  geom_point() +
+  labs(title = "Age / Heart", 
+       subtitle = paste("p-value", pval.output(pval))) +
+  theme(legend.position="none")
+```
+
+### Sex - Kidney
+
+```{r sod_sex_kidney, echo=FALSE, fig.width=5, fig.height=5}
+pval <- subset(tidy(anova(lm(Sex.mrna ~ factor(Sex) + Sex.prot, data=pred.kidney))), term=="Sex.prot")$p.value
+
+ggplot(pred.kidney, aes(x=Sex.mrna, y= Sex.prot, color=factor(Sex), shape=factor(Age))) +
+  geom_point() +
+  labs(title = "Sex / Kidney", 
+       subtitle = paste("p-value", pval.output(pval))) +
+  theme(legend.position="none")
+```
+
+### Sex - Heart
+
+```{r sod_sex_heart, echo=FALSE, fig.width=5, fig.height=5}
+pval <- subset(tidy(anova(lm(Sex.mrna ~ factor(Sex) + Sex.prot, data=pred.heart))), term=="Sex.prot")$p.value
+
+ggplot(pred.heart, aes(x=Sex.mrna, y= Sex.prot, color=factor(Sex), shape=factor(Age))) +
+  geom_point() +
+  labs(title = "Sex / Heart", 
+       subtitle = paste("p-value", pval.output(pval))) +
+  theme(legend.position="none")
+```
+
+## Session Information
+
+```{r session-info}
+```
