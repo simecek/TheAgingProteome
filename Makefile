@@ -10,6 +10,11 @@ pca: ../kidney2/kidney_pca_loadings.csv \
      ../kidney2/kidney_pca_loadings_mrna.csv \
      ../heart2/heart_pca_loadings_mrna.csv
 
+predictions: glmnet
+
+glmnet: ../kidney2/kidney_predict_glmnet.csv \
+        ../heart2/heart_predict_glmnet.csv
+
 ../kidney2/kidney_anova_table.csv: code/anova_tests.R ../kidney2/R/DO188b_kidney_noprobs.RData
 	Rscript code/anova_tests.R ../kidney2/R/DO188b_kidney_noprobs.RData \
 	  ../kidney2/kidney_anova_table.csv
@@ -57,3 +62,9 @@ pca: ../kidney2/kidney_pca_loadings.csv \
 ../heart2/heart_pca_predict_mrna.csv: code/pca_mrna.R ../heart2/DO189_heart_v2_noprobs.RData
 	Rscript code/pca_mrna.R ../heart2/DO189_heart_v2_noprobs.RData \
     ../heart2/heart_pca_loadings_mrna.csv ../heart2/heart_pca_predict_mrna.csv
+
+../kidney2/kidney_predict_glmnet.csv: code/predict_glmnet.R ../kidney2/R/DO188b_kidney_noprobs.RData
+	Rscript code/predict_glmnet.R ../kidney2/R/DO188b_kidney_noprobs.RData ../kidney2/kidney_predict_glmnet.csv
+
+../heart2/heart_predict_glmnet.csv: code/predict_glmnet.R ../heart2/DO189_heart_v2_noprobs.RData
+	Rscript code/predict_glmnet.R ../heart2/DO189_heart_v2_noprobs.RData ../heart2/heart_predict_glmnet.csv
