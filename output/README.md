@@ -4,6 +4,8 @@ Processed data are too big to be stored on Github but download links are provide
 
 - ANOVA results for kidney [kidney_anova_table.csv](https://www.dropbox.com/s/1fvh4mzngmgvxfn/kidney_anova_table.csv?dl=0)
 - ANOVA results for heart [heart_anova_table.csv](https://www.dropbox.com/s/a47z5f76feq7p3g/heart_anova_table.csv?dl=0)
+- Age/Sex predictions for kidney: [kidney_predict_glmnet.csv](https://www.dropbox.com/s/dwkiu6whzmgq6m0/kidney_predict_glmnet.csv?dl=0)
+- Age/Sex predictions for heart: [heart_predict_glmnet.csv](https://www.dropbox.com/s/f81td079thzkt78/heart_predict_glmnet.csv?dl=0)
 - PCA results for kidney: [kidney_pca_loadings.csv](https://www.dropbox.com/s/cbdxdxs5qfw42q4/kidney_pca_loadings.csv?dl=0) and [kidney_pca_predict.csv](https://www.dropbox.com/s/f3fr33xuh50t1cy/kidney_pca_predict.csv?dl=0)
 - PCA results for heart: [heart_pca_loadings.csv](https://www.dropbox.com/s/q7a4lr0nc455sa7/heart_pca_loadings.csv?dl=0) and [heart_pca_predict.csv](https://www.dropbox.com/s/s59ib1fm5bkv8ek/heart_pca_predict.csv?dl=0)
 - versions of all tables above calculated on mRNA level only (even genes with no protein) [LINKS to be added, in dropbox, look for ..._mrna... files]
@@ -20,6 +22,12 @@ The columns in CSV table with heart/kidney results are as follows:
 - `average.(mRNA|Prot).G.L`: average expression calculated for samples that in grouping `G` attain a level `L`
 
 Only genes with both mRNA and protein expression are used.
+
+### Age/Sex Predictions
+
+- `Mouse.ID`, `Sex`, `Generation`, `Age`, ...: sample annotation
+- `X.Y`: prediction of `X` (Age or Sex) based on `Y` (protein expression, mRNA expression - only genes with proteins, mRNA expression - all genes)  
+
 
 ### PCA output:
 
