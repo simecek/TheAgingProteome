@@ -15,9 +15,23 @@ knitr::read_chunk("chunks.R")
 
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
+
+How precisely could we predict age and sex of a mouse from its mRNA / protein expression data? It depends on a tool we use. In this analysis, we utilize [glmnet](https://cran.r-project.org/web/packages/glmnet/index.html) package fitting Lasso and elastic-Net regularized linear models. 
+
+Each prediction is made without using the animal itself and the quality of glmnet predictions is then judged by comparing those predictions to true values (*jackknife resampling*). 
+
+While sex predictions are very accurate, some animals seem to be predicted younger or older than they really are. Is it a random fluctuation? Or are those signatures of aging shared across different datasets?
+
+The signatures of aging seem to be shared within the tissue. For kidney and somewhat for heart we observe mRNA and protein based predictions to be correlated.
+
+The between-tissues story is more complicated. On mRNA level, we observe a striking correlation caused by several shared age-outliers (F787, M989, M907, F1208). On protein level we do not see anything like that and after adjust for age group, the correlation between predictions is not statistically significant. 
+
+The report has been generated from R/Markdown file [predict-glmnet.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/predict-glmnet.Rmd). Glmnet predictions have been calculated by [predict_glmnet.R](https://github.com/simecek/TheAgingProteome/blob/master/code/predict_glmnet.R) script.
+
 ```{r read_data, include=FALSE}
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(plotly))
 suppressPackageStartupMessages(library(broom))
 suppressPackageStartupMessages(library(gridExtra))
 
@@ -28,6 +42,7 @@ pred.heart <- read.csv("../../heart2/heart_predict_glmnet.csv", as.is=TRUE)
 pred.both <- inner_join(pred.kidney, pred.heart, 
                   by = c("Mouse.ID", "Sex", "Age", "Generation"),
                   suffix = c("_kidney", "_heart"))
+pred.both$text <- paste0(ifelse(pred.both$Sex==2,"M","F"), pred.both$Sample.Number_kidney)
 
 # function for outputing p-values
 pval.output <- function(p) {
@@ -39,7 +54,6 @@ pval.output <- function(p) {
 
 ```
 
-The report has been generated from R/Markdown file [predict-glmnet.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/predict-glmnet.Rmd). Glmnet predictions have been calculated by [predict_glmnet.R](https://github.com/simecek/TheAgingProteome/blob/master/code/predict_glmnet.R) script.
 
 ## Quality of Predictions
 
@@ -51,7 +65,7 @@ cols <- c("Age.prot_kidney", "Age.prot_heart",
           "Age.mrna_kidney", "Age.mrna_heart")
 for (c in cols) {
   new.line <- data.frame(variable = c,
-                         se = sqrt(mean((pred.both[,c] - pred.both[,"Age"])^2)),
+                         rmse = sqrt(mean((pred.both[,c] - pred.both[,"Age"])^2)),
                          cor = cor(pred.both[,c], pred.both[,"Age"]))
   quality.table <- rbind(quality.table, new.line)
 }
@@ -92,7 +106,7 @@ cols <- c("Sex.prot_kidney", "Sex.prot_heart",
           "Sex.mrna_kidney", "Sex.mrna_heart")
 for (c in cols) {
   new.line <- data.frame(variable = c,
-                         se = sqrt(mean((pred.both[,c] - pred.both[,"Sex"])^2)),
+                         rmse = sqrt(mean((pred.both[,c] - pred.both[,"Sex"])^2)),
                          cor = cor(pred.both[,c], pred.both[,"Sex"]))
   quality.table <- rbind(quality.table, new.line)
 }
@@ -126,53 +140,67 @@ grid.arrange(p4, p3, p2, p1, ncol = 2)
 
 ## Comparison between tissues 
 
+Interactive plots below have titles reporting the comparison group and p-value for test of dependence between predictions (adjusting for age factor).
+
 ### Age - mRNA
 
+<center>
 ```{r sod_age_mrna, echo=FALSE, fig.width=5, fig.height=5}
 pval <- subset(tidy(anova(lm(Age.mrna_kidney ~ factor(Age) + Age.mrna_heart, data=pred.both))), term=="Age.mrna_heart")$p.value
 
-ggplot(pred.both, aes(x=Age.mrna_kidney, y= Age.mrna_heart, color=factor(Age), shape=factor(Sex))) +
+pl <- ggplot(pred.both, aes(x=Age.mrna_kidney, y= Age.mrna_heart, color=factor(Age), shape=factor(Sex), text=text)) +
   geom_point() +
-  labs(title = "Age / mRNA", 
-       subtitle = paste("p-value", pval.output(pval))) +
+  labs(title = paste("Age / mRNA:",  
+        "p-value", pval.output(pval))) +
   theme(legend.position="none")
+ggplotly(pl, tooltip="text")
 ```
+</center>
 
 ### Age - protein
 
+<center>
 ```{r sod_age_prot, echo=FALSE, fig.width=5, fig.height=5}
 pval <- subset(tidy(anova(lm(Age.prot_kidney ~ factor(Age) + Age.prot_heart, data=pred.both))), term=="Age.prot_heart")$p.value
 
-ggplot(pred.both, aes(x=Age.prot_kidney, y= Age.prot_heart, color=factor(Age), shape=factor(Sex))) +
+pl <- ggplot(pred.both, aes(x=Age.prot_kidney, y= Age.prot_heart, color=factor(Age), shape=factor(Sex), text=text)) +
   geom_point() +
-  labs(title = "Age / protein", 
-       subtitle = paste("p-value", pval.output(pval))) +
+  labs(title = paste("Age / protein:",
+               "p-value", pval.output(pval))) +
   theme(legend.position="none")
+ggplotly(pl, tooltip="text")
 ```
+</center>
 
 ### Sex - mRNA
 
+<center>
 ```{r sod_Sex_mrna, echo=FALSE, fig.width=5, fig.height=5}
 pval <- subset(tidy(anova(lm(Sex.mrna_kidney ~ factor(Sex) + Sex.mrna_heart, data=pred.both))), term=="Sex.mrna_heart")$p.value
 
-ggplot(pred.both, aes(x=Sex.mrna_kidney, y= Sex.mrna_heart, color=factor(Sex), shape=factor(Age))) +
+pl <- ggplot(pred.both, aes(x=Sex.mrna_kidney, y= Sex.mrna_heart, color=factor(Sex), shape=factor(Age)), text=text) +
   geom_point() +
-  labs(title = "Sex / mRNA", 
-       subtitle = paste("p-value", pval.output(pval))) +
+  labs(title = paste("Sex / mRNA:", 
+              "p-value", pval.output(pval))) +
   theme(legend.position="none")
+ggplotly(pl, tooltip="text")
 ```
+</center>
 
 ### Sex - protein
 
+<center>
 ```{r sod_Sex_prot, echo=FALSE, fig.width=5, fig.height=5}
 pval <- subset(tidy(anova(lm(Sex.prot_kidney ~ factor(Sex) + Sex.prot_heart, data=pred.both))), term=="Sex.prot_heart")$p.value
 
-ggplot(pred.both, aes(x=Sex.prot_kidney, y= Sex.prot_heart, color=factor(Sex), shape=factor(Age))) +
+pl <- ggplot(pred.both, aes(x=Sex.prot_kidney, y= Sex.prot_heart, color=factor(Sex), shape=factor(Age), text=text)) +
   geom_point() +
-  labs(title = "Sex / protein", 
-       subtitle = paste("p-value", pval.output(pval))) +
+  labs(title = paste("Sex / protein:", 
+       "p-value", pval.output(pval))) +
   theme(legend.position="none")
+ggplotly(pl, tooltip="text")
 ```
+</center>
 
 ## Comparison between mRNA and protein levels
 
