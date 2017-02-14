@@ -22,9 +22,9 @@ Each prediction is made without using the animal itself and the quality of glmne
 
 While sex predictions are very accurate, some animals seem to be predicted younger or older than they really are. Is it a random fluctuation? Or are those signatures of aging shared across different datasets?
 
-The signatures of aging seem to be shared within the tissue. For kidney and somewhat for heart we observe mRNA and protein based predictions to be correlated.
+The signature of aging seems to be shared within the tissue. For kidney and for heart we observe mRNA and protein based predictions to be correlated.
 
-The between-tissues story is more complicated. On mRNA level, we observe a striking correlation caused by several shared age-outliers (F787, M989, M907, F1208). On protein level we do not see anything like that and after adjust for age group, the correlation between predictions is not statistically significant. 
+The between-tissues story is more complicated. On mRNA level, we observe a striking correlation caused by several shared age-outliers (F787, M989, M907, F1208). On protein level we do not see anything like that and after adjusting for age group, the correlation between predictions is not statistically significant. 
 
 The report has been generated from R/Markdown file [predict-glmnet.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/predict-glmnet.Rmd). Glmnet predictions have been calculated by [predict_glmnet.R](https://github.com/simecek/TheAgingProteome/blob/master/code/predict_glmnet.R) script.
 
@@ -210,7 +210,7 @@ ggplotly(pl, tooltip="text")
 pval <- subset(tidy(anova(lm(Age.mrna ~ factor(Age) + Age.prot, data=pred.kidney))), term=="Age.prot")$p.value
 
 ggplot(pred.kidney, aes(x=Age.mrna, y= Age.prot, color=factor(Age), shape=factor(Sex))) +
-  geom_point() +
+  geom_point(size=I(3)) +
   labs(title = "Age / Kidney", 
        subtitle = paste("p-value", pval.output(pval))) +
   theme(legend.position="none")
@@ -222,7 +222,7 @@ ggplot(pred.kidney, aes(x=Age.mrna, y= Age.prot, color=factor(Age), shape=factor
 pval <- subset(tidy(anova(lm(Age.mrna ~ factor(Age) + Age.prot, data=pred.heart))), term=="Age.prot")$p.value
 
 ggplot(pred.heart, aes(x=Age.mrna, y= Age.prot, color=factor(Age), shape=factor(Sex))) +
-  geom_point() +
+  geom_point(size=I(3)) +
   labs(title = "Age / Heart", 
        subtitle = paste("p-value", pval.output(pval))) +
   theme(legend.position="none")
@@ -234,7 +234,7 @@ ggplot(pred.heart, aes(x=Age.mrna, y= Age.prot, color=factor(Age), shape=factor(
 pval <- subset(tidy(anova(lm(Sex.mrna ~ factor(Sex) + Sex.prot, data=pred.kidney))), term=="Sex.prot")$p.value
 
 ggplot(pred.kidney, aes(x=Sex.mrna, y= Sex.prot, color=factor(Sex), shape=factor(Age))) +
-  geom_point() +
+  geom_point(size=I(3)) +
   labs(title = "Sex / Kidney", 
        subtitle = paste("p-value", pval.output(pval))) +
   theme(legend.position="none")
@@ -246,7 +246,7 @@ ggplot(pred.kidney, aes(x=Sex.mrna, y= Sex.prot, color=factor(Sex), shape=factor
 pval <- subset(tidy(anova(lm(Sex.mrna ~ factor(Sex) + Sex.prot, data=pred.heart))), term=="Sex.prot")$p.value
 
 ggplot(pred.heart, aes(x=Sex.mrna, y= Sex.prot, color=factor(Sex), shape=factor(Age))) +
-  geom_point() +
+  geom_point(size=I(3)) +
   labs(title = "Sex / Heart", 
        subtitle = paste("p-value", pval.output(pval))) +
   theme(legend.position="none")

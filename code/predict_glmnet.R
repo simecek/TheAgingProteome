@@ -34,12 +34,12 @@ annot.samples$Sex <- as.numeric(factor(annot.samples$Sex))
 # which numeric columns from annot.samples are we going to predict
 to.be.predicted <- c("Age", "Sex")
 
-# other covariates to use
-covars <- list(Age = model.matrix(~Sex+Generation, data=annot.samples),
-               Sex = model.matrix(~Age+Generation, data=annot.samples))
+# other covariates to use besides Generation
+covars <- list(Age = model.matrix(~0+Sex, data=annot.samples),
+               Sex = model.matrix(~0+Age, data=annot.samples))
 
 # level of prediction
-levels <- c("prot", "mrna") # all_mrna - to be added later
+levels <- c("prot", "mrna", "all_mrna") # all_mrna - to be added later
 
 # factors to be used
 xs = list(prot = expr.protein[,1:N[["complete"]]],
@@ -58,7 +58,8 @@ for (p in to.be.predicted)
     # predictors
     x = xs[[l]]
     # other predictors
-    covar <- covars[[p]]
+    covar <- cbind(covars[[p]], 
+                   model.matrix(~0+Generation, data=annot.samples))
     
     X <- cbind(x, covar)
     
