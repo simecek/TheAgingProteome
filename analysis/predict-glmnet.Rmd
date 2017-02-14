@@ -16,7 +16,7 @@ knitr::read_chunk("chunks.R")
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
 
-How precisely could we predict age and sex of a mouse from its mRNA / protein expression data? It depends on a tool we use. In this analysis, we utilize [glmnet](https://cran.r-project.org/web/packages/glmnet/index.html) package fitting Lasso and elastic-Net regularized linear models. 
+How precisely could we predict age and sex of a mouse from its mRNA / protein expression data? It depends on a tool we use. In this analysis, we utilize [glmnet](https://cran.r-project.org/web/packages/glmnet/index.html) package fitting lasso and elastic-net regularized linear models. 
 
 Each prediction is made without using the animal itself and the quality of glmnet predictions is then judged by comparing those predictions to true values (*jackknife resampling*). 
 
