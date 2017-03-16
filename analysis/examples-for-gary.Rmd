@@ -96,6 +96,9 @@ grid.arrange(p1, p2, ncol = 2)
 
 ### Kidney vs Heart Expression
 ```{r, echo=FALSE, fig.width=10, fig.height=4.5}
+# for some reasons, heart SN are characters
+heart$annot.samples$Sample.Number <- as.numeric(heart$annot.samples$Sample.Number)
+
 sn <- intersect(kidney$pca1$Sample.Number, heart$pca1$Sample.Number)
 kidney$idx <- match(sn, kidney$pca1$Sample.Number)
 heart$idx <- match(sn, heart$pca1$Sample.Number)

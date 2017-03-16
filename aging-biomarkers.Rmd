@@ -1,0 +1,66 @@
+---
+title: "Aging Biomarkers"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+## Cdkn2a
+
+```{r}
+kidney = new.env()
+heart = new.env()
+load("../../kidney2/R/DO188b_kidney_noprobs.RData", env=kidney)
+load("../../heart2/DO189_heart_v2_noprobs.RData", env=heart)
+
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(ggsci))
+theme_set(theme_bw())
+
+pval.output <- function(p) {
+  if (p<0.001) 
+    return("< 0.001") 
+  else 
+    paste("=",round(p,3))
+}
+
+# for some reasons, heart SN are characters
+heart$annot.samples$Sample.Number <- as.numeric(heart$annot.samples$Sample.Number)
+
+sn <- intersect(kidney$pca1$Sample.Number, heart$pca1$Sample.Number)
+kidney$idx <- match(sn, kidney$pca1$Sample.Number)
+heart$idx <- match(sn, heart$pca1$Sample.Number)
+
+sel.gene <- "Cdkn2a"
+sel.kidney <- which(kidney$annot.mrna$symbol == "Cdkn2a")
+sel.heart <- which(heart$annot.mrna$symbol == "Cdkn2a")
+
+sel.mrna <- cbind(kidney$annot.samples[kidney$idx, ], 
+              Kidney = kidney$expr.mrna[kidney$idx, sel.kidney],
+              Heart = heart$expr.mrna[heart$idx, sel.heart])
+sel.mrna$Age <- factor(mrna$Age, levels = c(6,12,18))
+
+ggplot(sel.mrna, aes(x = Kidney, y = Heart, color = Age, shape=Sex, group=Age)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE, size=0.2) +
+  labs(title = "Protein Expression") +
+  scale_color_uchicago() + labs(title="Cdkn2a")
+
+```
+
+
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
