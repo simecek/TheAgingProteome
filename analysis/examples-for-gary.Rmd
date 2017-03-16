@@ -1,0 +1,132 @@
+---
+title: "Complex I Genes"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+The report has been generated from R/Markdown file [examples-for-gary.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/examples-for-gary.Rmd).
+
+## Complex I Genes
+
+### Age and Sex Effects 
+
+In both tissues, Complex I genes protein expression decreases with Age and Sex differences disappear. For mRNA expression, Age effect is small or missing.
+
+```{r, echo=FALSE, fig.width=10, fig.height=4.5}
+# load data
+kidney = new.env()
+heart = new.env()
+load("../../kidney2/R/DO188b_kidney_noprobs.RData", env=kidney)
+load("../../heart2/DO189_heart_v2_noprobs.RData", env=heart)
+
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(ggsci))
+suppressPackageStartupMessages(library(gridExtra))
+theme_set(theme_bw())
+
+# read a list of Complex I genes
+complex1 <- read.csv("../data/MitoComplexIGenes.txt", sep="\t", as.is=TRUE)
+
+kidney$c1sel <- which(kidney$annot.mrna$symbol[1:kidney$N[["complete"]]] %in% complex1$Symbol)
+kidney$pca.mrna <- prcomp(scale(as.matrix(kidney$expr.mrna)[,kidney$c1sel]))
+kidney$pca.protein <- prcomp(scale(as.matrix(kidney$expr.protein)[,kidney$c1sel]))
+kidney$pca1 <- cbind(kidney$annot.samples, 
+                     mrna_pca1 = predict(kidney$pca.mrna)[,1],
+                     prot_pca1 = predict(kidney$pca.protein)[,1])
+kidney$pca1$Age <- factor(kidney$pca1$Age, levels = c(6,12,18))
+p1 <- ggplot(kidney$pca1, aes(x = Age, y = prot_pca1, color = Sex, group=Sex)) +
+  geom_jitter(width=0.1) +
+  geom_smooth(method="lm", se=FALSE) +
+  labs(title = "Protein Expression", subtitle = "Kidney") +
+  scale_color_npg()
+p2 <- ggplot(kidney$pca1, aes(x = Age, y = mrna_pca1, color = Sex, group=Sex)) +
+  geom_jitter(width=0.1) +
+  geom_smooth(method="lm", se=FALSE) +
+  labs(title = "mRNA Expression", subtitle = "Kidney") +
+  scale_color_npg()
+grid.arrange(p1, p2, ncol = 2)
+```
+
+```{r, echo=FALSE, fig.width=10, fig.height=4.5}
+heart$c1sel <- which(heart$annot.mrna$symbol[1:heart$N[["complete"]]] %in% complex1$Symbol)
+heart$pca.mrna <- prcomp(scale(as.matrix(heart$expr.mrna)[,heart$c1sel]))
+heart$pca.protein <- prcomp(scale(as.matrix(heart$expr.protein)[,heart$c1sel]))
+heart$pca1 <- cbind(heart$annot.samples, 
+                     mrna_pca1 = predict(heart$pca.mrna)[,1],
+                     prot_pca1 = predict(heart$pca.protein)[,1])
+heart$pca1$Age <- factor(heart$pca1$Age, levels = c(6,12,18))
+p1 <- ggplot(heart$pca1, aes(x = Age, y = prot_pca1, color = Sex, group=Sex)) +
+  geom_jitter(width=0.1) +
+  geom_smooth(method="lm", se=FALSE) +
+  labs(title = "Protein Expression", subtitle = "Heart") +
+  scale_color_npg()
+p2 <- ggplot(heart$pca1, aes(x = Age, y = mrna_pca1, color = Sex, group=Sex)) +
+  geom_jitter(width=0.1) +
+  geom_smooth(method="lm", se=FALSE) +
+  labs(title = "mRNA Expression", subtitle = "Heart") +
+  scale_color_npg()
+grid.arrange(p1, p2, ncol = 2)
+```
+
+### Protein vs mRNA Expression
+```{r, echo=FALSE, fig.width=10, fig.height=4.5}
+p1 <- ggplot(kidney$pca1, aes(x = mrna_pca1, y = prot_pca1, color = Age, shape=Sex, group=Age)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE, size=0.2) +
+  labs(title = "Kidney", subtitle = "mRNA vs. Protein") +
+  scale_color_uchicago()
+p2 <- ggplot(heart$pca1, aes(x = mrna_pca1, y = prot_pca1, color = Age, shape=Sex, group=Age)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE, size=0.2) +
+  labs(title = "Heart", subtitle = "mRNA vs. Protein") +
+  scale_color_uchicago()
+grid.arrange(p1, p2, ncol = 2)
+```
+
+### Kidney vs Heart Expression
+```{r, echo=FALSE, fig.width=10, fig.height=4.5}
+sn <- intersect(kidney$pca1$Sample.Number, heart$pca1$Sample.Number)
+kidney$idx <- match(sn, kidney$pca1$Sample.Number)
+heart$idx <- match(sn, heart$pca1$Sample.Number)
+
+mrna <- cbind(kidney$annot.samples[kidney$idx, ], 
+              Kidney = kidney$pca1$mrna_pca1[kidney$idx],
+              Heart = heart$pca1$mrna_pca1[heart$idx])
+mrna$Age <- factor(mrna$Age, levels = c(6,12,18))
+
+prot <- cbind(kidney$annot.samples[kidney$idx, ], 
+              Kidney = kidney$pca1$prot_pca1[kidney$idx],
+              Heart = heart$pca1$prot_pca1[heart$idx])
+prot$Age <- factor(prot$Age, levels = c(6,12,18))
+
+p1 <- ggplot(prot, aes(x = Kidney, y = Heart, color = Age, shape=Sex, group=Age)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE, size=0.2) +
+  labs(title = "Protein Expression", subtitle = "Kidney vs. Heart") +
+  scale_color_uchicago()
+p2 <- ggplot(mrna, aes(x = Kidney, y = Heart, color = Age, shape=Sex, group=Age)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE, size=0.2) +
+  labs(title = "mRNA Expression", subtitle = "Kidney vs. Heart") +
+  scale_color_uchicago()
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
