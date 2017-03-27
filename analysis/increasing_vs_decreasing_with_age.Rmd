@@ -1,5 +1,5 @@
 ---
-title: "Are Age-associated Changes in Protein Expression Increasing or Decreasing"
+title: "Direction of Age Effect"
 author: "Petr Simecek"
 output: html_document
 ---
@@ -15,37 +15,80 @@ knitr::read_chunk("chunks.R")
 
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
+#### Gary's Question
 
-```{r cars}
-library(tidyverse)
+*can you quickly assess how many of the age-associated changes in kidney&heart protein are increasing versus decreasing? The more i learn about mass-spec, the weirder it gets.  Depending on your reply - I will explain what I think might be going on.*
+
+#### Short Answer
+
+Strongly Age-associated proteins are more likely to be decreasing with Age than increasing with Age.
+
+#### Long Answer
+
+If percentage of down / up regulation is plotted against categorized p-value of dropping Age from the model, then for the most Age-associated proteins down regulation is clearly over 50 percent.
+
+The report has been generated from R/Markdown file [examples-for-gary.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/increasing_vs_decreasing_with_age.Rmd).
+
+```{r cars, echo=FALSE}
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(ggplot2))
 
 kidney <- read.csv("../../kidney2/kidney_anova_table.csv", as.is=TRUE)
 heart <- read.csv("../../heart2/heart_anova_table.csv", as.is=TRUE)
 
-heart.summary <- heart %>% 
-  select(p.Prot_Age.Sex, average.Prot.Age.6, average.Prot.Age.18) %>%
-  mutate(age_change = average.Prot.Age.18 - average.Prot.Age.6,
-         age_direction = sign(age_change),
-         p.adj = p.adjust(p.Prot_Age.Sex, method="BH"),
-         minus.log.p.adj = -log10(p.Prot_Age.Sex))
-
-tmp <- heart.summary %>%  
-    filter(p.adj < 0.01) %>%
-    summarize(up = sum(age_direction == 1),
-          down = sum(age_direction == -1))
-
+# transform summary statistics for kidney
 kidney.summary <- kidney %>% 
   select(p.Prot_Age.Sex, average.Prot.Age.6, average.Prot.Age.18) %>%
   mutate(age_change = average.Prot.Age.18 - average.Prot.Age.6,
-         age_direction = sign(age_change),
+         age_direction = factor(ifelse(age_change<0,"down","up"), levels=c("up","down")),
          p.adj = p.adjust(p.Prot_Age.Sex, method="BH"),
-         minus.log.p.adj = -log10(p.Prot_Age.Sex)) 
+         minus.log.p.adj = -log10(p.adj),
+         minus.log.p.adj.cat = ifelse(round(minus.log.p.adj)<9,
+                                round(minus.log.p.adj), "9+" )) 
 
-tmp2 <- kidney.summary %>%
-  filter(p.adj < 0.01) %>%
-  summarize(up = sum(age_direction == 1),
-          down = sum(age_direction == -1))
+# count ups and downs per -logP category 
+tab.kidney <- kidney.summary %>%
+  group_by(minus.log.p.adj.cat) %>%
+  summarize(n=n())
 
+# make a plot
+ggplot(kidney.summary, aes(x=minus.log.p.adj.cat)) + 
+  geom_bar(aes(fill=age_direction), position="fill") +
+  geom_text(data = tab.kidney, aes(x=minus.log.p.adj.cat, label=n, y=1), vjust=-0.2) +
+  geom_hline(yintercept=0.5, color="grey70") +
+  theme_minimal() +
+  labs(title = "Kidney",
+       subtitle = "Number of proteins in each category is stated above the bars",
+       y = "Up vs. Down",
+       x = expression(-log[10](p-adjusted)),
+       fill = "Direction of Age-Effect")
+
+# transform summary statistics for heart
+heart.summary <- heart %>% 
+  select(p.Prot_Age.Sex, average.Prot.Age.6, average.Prot.Age.18) %>%
+  mutate(age_change = average.Prot.Age.18 - average.Prot.Age.6,
+         age_direction = factor(ifelse(age_change<0,"down","up"), levels=c("up","down")),
+         p.adj = p.adjust(p.Prot_Age.Sex, method="BH"),
+         minus.log.p.adj = -log10(p.adj),
+         minus.log.p.adj.cat = ifelse(round(minus.log.p.adj)<9,
+                                round(minus.log.p.adj), "9+" )) 
+
+# count ups and downs per -logP category 
+tab.heart <- heart.summary %>%
+  group_by(minus.log.p.adj.cat) %>%
+  summarize(n=n())
+
+# make a plot
+ggplot(heart.summary, aes(x=minus.log.p.adj.cat)) + 
+  geom_bar(aes(fill=age_direction), position="fill") +
+  geom_text(data = tab.heart, aes(x=minus.log.p.adj.cat, label=n, y=1), vjust=-0.2) +
+  geom_hline(yintercept=0.5, color="grey70") +
+  theme_minimal() +
+  labs(title = "Heart",
+       subtitle = "Number of proteins in each category is stated above the bars",
+       y = "Up vs. Down",
+       x = expression(-log[10](p-adjusted)),
+       fill = "Direction of Age-Effect")
 ```
 
 
