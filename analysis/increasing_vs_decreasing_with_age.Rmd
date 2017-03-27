@@ -1,0 +1,55 @@
+---
+title: "Are Age-associated Changes in Protein Expression Increasing or Decreasing"
+author: "Petr Simecek"
+output: html_document
+---
+
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r workflowr::extract_commit(".", 1)$sha1`
+
+
+```{r cars}
+library(tidyverse)
+
+kidney <- read.csv("../../kidney2/kidney_anova_table.csv", as.is=TRUE)
+heart <- read.csv("../../heart2/heart_anova_table.csv", as.is=TRUE)
+
+heart.summary <- heart %>% 
+  select(p.Prot_Age.Sex, average.Prot.Age.6, average.Prot.Age.18) %>%
+  mutate(age_change = average.Prot.Age.18 - average.Prot.Age.6,
+         age_direction = sign(age_change),
+         p.adj = p.adjust(p.Prot_Age.Sex, method="BH"),
+         minus.log.p.adj = -log10(p.Prot_Age.Sex))
+
+tmp <- heart.summary %>%  
+    filter(p.adj < 0.01) %>%
+    summarize(up = sum(age_direction == 1),
+          down = sum(age_direction == -1))
+
+kidney.summary <- kidney %>% 
+  select(p.Prot_Age.Sex, average.Prot.Age.6, average.Prot.Age.18) %>%
+  mutate(age_change = average.Prot.Age.18 - average.Prot.Age.6,
+         age_direction = sign(age_change),
+         p.adj = p.adjust(p.Prot_Age.Sex, method="BH"),
+         minus.log.p.adj = -log10(p.Prot_Age.Sex)) 
+
+tmp2 <- kidney.summary %>%
+  filter(p.adj < 0.01) %>%
+  summarize(up = sum(age_direction == 1),
+          down = sum(age_direction == -1))
+
+```
+
+
+## Session Information
+
+```{r session-info}
+```
