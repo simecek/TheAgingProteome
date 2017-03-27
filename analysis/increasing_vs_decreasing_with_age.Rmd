@@ -27,7 +27,7 @@ Strongly Age-associated proteins are more likely to be decreasing with Age than 
 
 If percentage of down / up regulation is plotted against categorized p-value of dropping Age from the model, then for the most Age-associated proteins down regulation is clearly over 50 percent.
 
-The report has been generated from R/Markdown file [examples-for-gary.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/increasing_vs_decreasing_with_age.Rmd).
+The report has been generated from R/Markdown file [increasing_vs_decreasing_with_age.Rmd](https://github.com/simecek/TheAgingProteome/blob/master/analysis/increasing_vs_decreasing_with_age.Rmd).
 
 ```{r cars, echo=FALSE}
 suppressPackageStartupMessages(library(dplyr))
