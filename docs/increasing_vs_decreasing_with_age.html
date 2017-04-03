@@ -307,8 +307,10 @@ div.tocify {
 </div>
 
 
-<p><strong>Last updated:</strong> 2017-03-27</p>
-<p><strong>Code version:</strong> 360036e</p>
+<p><strong>Last updated:</strong> 2017-04-03</p>
+<p><strong>Code version:</strong> 9fb0a7c</p>
+<div id="proteins" class="section level2">
+<h2>Proteins</h2>
 <div id="garys-question" class="section level4">
 <h4>Gary’s Question</h4>
 <p><em>can you quickly assess how many of the age-associated changes in kidney&amp;heart protein are increasing versus decreasing? The more i learn about mass-spec, the weirder it gets. Depending on your reply - I will explain what I think might be going on.</em></p>
@@ -322,30 +324,41 @@ div.tocify {
 <p>If percentage of down / up regulation is plotted against categorized p-value of dropping Age from the model, then for the most Age-associated proteins down regulation is clearly over 50 percent.</p>
 <p>The report has been generated from R/Markdown file <a href="https://github.com/simecek/TheAgingProteome/blob/master/analysis/increasing_vs_decreasing_with_age.Rmd">increasing_vs_decreasing_with_age.Rmd</a>.</p>
 <p><img src="figure/increasing_vs_decreasing_with_age.Rmd/cars-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/increasing_vs_decreasing_with_age.Rmd/cars-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This might be due to protein modifications (modified peptides are not detected).</p>
+</div>
+</div>
+<div id="mrna" class="section level2">
+<h2>mRNA</h2>
+<p>There are not so many strong regulations on mRNA level. But the majority of Age down regulations in the strongest category cannot be observed here. Moreover, for kidney, the majority of regulations seem to be in the opposite direction.</p>
+<p><img src="figure/increasing_vs_decreasing_with_age.Rmd/mrna-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/increasing_vs_decreasing_with_age.Rmd/mrna-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="session-information" class="section level2">
 <h2>Session Information</h2>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 3.3.2 (2016-10-31)
-Platform: x86_64-apple-darwin13.4.0 (64-bit)
-Running under: macOS Sierra 10.12.3
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 7 x64 (build 7601) Service Pack 1
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] ggplot2_2.2.1.9000 dplyr_0.5.0       
+[1] ggplot2_2.2.1 dplyr_0.5.0  
 
 loaded via a namespace (and not attached):
- [1] workflowr_0.4.0  Rcpp_0.12.9      digest_0.6.12    rprojroot_1.2   
+ [1] workflowr_0.3.0  Rcpp_0.12.9      digest_0.6.12    rprojroot_1.2   
  [5] assertthat_0.1   plyr_1.8.4       grid_3.3.2       R6_2.2.0        
- [9] gtable_0.2.0     DBI_0.5-1        backports_1.0.5  git2r_0.18.0    
+ [9] gtable_0.2.0     DBI_0.5-1        backports_1.0.4  git2r_0.18.0    
 [13] magrittr_1.5     scales_0.4.1     evaluate_0.10    stringi_1.1.2   
 [17] lazyeval_0.2.0   rmarkdown_1.3    labeling_0.3     tools_3.3.2     
-[21] stringr_1.2.0    munsell_0.4.3    yaml_2.1.14      colorspace_1.3-2
+[21] stringr_1.1.0    munsell_0.4.3    yaml_2.1.14      colorspace_1.3-2
 [25] htmltools_0.3.5  knitr_1.15.1     tibble_1.2      </code></pre>
 </div>
 
