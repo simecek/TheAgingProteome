@@ -307,14 +307,18 @@ div.tocify {
 </div>
 
 
-<p><strong>Last updated:</strong> 2017-03-16</p>
-<p><strong>Code version:</strong> bc3dfa2</p>
+<p><strong>Last updated:</strong> 2017-04-03</p>
+<p><strong>Code version:</strong> 7d62186</p>
+<p>If we take aging biomarkers (genes or proteins with expression associated with age), is the aging signature shared between Heart and Kidney datasets?</p>
+<p>In another words, do samples that look older than actual age look older in both tissues?</p>
 <div id="c130026i21rik" class="section level2">
 <h2>C130026I21Rik</h2>
+<p><code>C130026I21Rik</code> is the most Age-associated gene in kidney (and the 5th in heart). The aging signature seems to be shared between tissues (p&lt;0.001).</p>
 <p><img src="figure/aging-biomarkers.Rmd/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="cdkn2a" class="section level2">
 <h2>Cdkn2a</h2>
+<p><code>Cdkn2a</code> is well-known aging signature. Unfortunatelly, it is not expressed in most samples and therefore it is hard to do between tissues comparison.</p>
 <p><img src="figure/aging-biomarkers.Rmd/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="session-information" class="section level2">
@@ -322,29 +326,32 @@ div.tocify {
 <!-- Insert the session information into the document -->
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 3.3.2 (2016-10-31)
-Platform: x86_64-apple-darwin13.4.0 (64-bit)
-Running under: macOS Sierra 10.12.3
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 7 x64 (build 7601) Service Pack 1
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] broom_0.4.2        magrittr_1.5       ggsci_2.4         
-[4] ggplot2_2.2.1.9000
+[1] broom_0.4.1   magrittr_1.5  ggsci_2.4     ggplot2_2.2.1
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.9      knitr_1.15.1     workflowr_0.4.0  mnormt_1.5-5    
+ [1] Rcpp_0.12.9      knitr_1.15.1     workflowr_0.3.0  mnormt_1.5-5    
  [5] munsell_0.4.3    lattice_0.20-34  colorspace_1.3-2 R6_2.2.0        
- [9] stringr_1.2.0    plyr_1.8.4       dplyr_0.5.0      tools_3.3.2     
+ [9] stringr_1.1.0    plyr_1.8.4       dplyr_0.5.0      tools_3.3.2     
 [13] parallel_3.3.2   grid_3.3.2       nlme_3.1-128     gtable_0.2.0    
 [17] psych_1.6.12     DBI_0.5-1        git2r_0.18.0     htmltools_0.3.5 
 [21] yaml_2.1.14      lazyeval_0.2.0   rprojroot_1.2    digest_0.6.12   
 [25] assertthat_0.1   tibble_1.2       tidyr_0.6.1      reshape2_1.4.2  
 [29] evaluate_0.10    rmarkdown_1.3    labeling_0.3     stringi_1.1.2   
-[33] scales_0.4.1     backports_1.0.5  foreign_0.8-67  </code></pre>
+[33] scales_0.4.1     backports_1.0.4  foreign_0.8-67  </code></pre>
 </div>
 
 <hr>

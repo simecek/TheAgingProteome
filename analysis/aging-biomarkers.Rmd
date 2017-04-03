@@ -15,9 +15,15 @@ knitr::read_chunk("chunks.R")
 
 **Code version:** `r workflowr::extract_commit(".", 1)$sha1`
 
+If we take aging biomarkers (genes or proteins with expression associated with age), is the aging signature shared between Heart and Kidney datasets? 
+
+In another words, do samples that look older than actual age look older in both tissues?
+
 ## C130026I21Rik
 
-```{r, echo=FALSE, fig.width=6, fig.height=6}
+`C130026I21Rik` is the most Age-associated gene in kidney (and the 5th in heart). The aging signature seems to be shared between tissues (p<0.001). 
+
+```{r, echo=FALSE, fig.height=6, fig.width=6, message=FALSE, warning=FALSE}
 kidney = new.env()
 heart = new.env()
 load("../../kidney2/R/DO188b_kidney_noprobs.RData", env=kidney)
@@ -62,12 +68,14 @@ ggplot(sel.mrna, aes(x = Kidney, y = Heart, color = Age, shape=Sex, group=Age)) 
   geom_smooth(method="lm", se=FALSE, size=0.2) +
   labs(title = "Protein Expression") +
   scale_color_uchicago() + 
-  labs(title=sel.gene, subtitle =pval.output(pval))
+  labs(title=sel.gene, subtitle = pval.output(pval))
 
 ```
 
 
 ## Cdkn2a
+
+`Cdkn2a` is well-known aging signature. Unfortunatelly, it is not expressed in most samples and therefore it is hard to do between tissues comparison. 
 
 ```{r, echo=FALSE, fig.width=6, fig.height=6}
 sel.gene <- "Cdkn2a"
@@ -79,8 +87,6 @@ sel.mrna <- cbind(kidney$annot.samples[kidney$idx, ],
               Heart = heart$expr.mrna[heart$idx, sel.heart])
 sel.mrna$Age <- factor(sel.mrna$Age, levels = c(6,12,18))
 
-library(magrittr)
-library(broom)
 av <- lm(Kidney ~ Age + Heart, data=sel.mrna) %>%
   anova() %>%
   tidy() 
