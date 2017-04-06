@@ -11,7 +11,7 @@ An unpublished analysis of aging [Diversity Outbred](https://www.jax.org/strain/
 
 * [Up or Down?](increasing_vs_decreasing_with_age.html) - Direction of Age Effect
 * [Selected Examples II](examples-for-gary.html) - Plots for Complex I Genes and other interesting groups
-* [Age Biomarkers](aging-biomarkers.html) - Is aging signature shared between both tissues?
+* [Aging Biomarkers](aging-biomarkers.html) - Is aging signature shared between both tissues?
 * [GLMNET Age/Sex Predictions](predict-glmnet.html) - Could we predict Age and Sex from mRNA/protein expression?
 * [Kidney vs. Heart](pvals_kidney_vs_heart.html) - Comparison of Sex and Age dependent genes and proteins.
 * [Mediation Examples](examples.html) - A few selected examples of Age/Sex effect on kidney/heart protein expression. 
