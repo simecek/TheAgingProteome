@@ -23,7 +23,7 @@ The report has been generated from R/Markdown file [examples-for-gary.Rmd](https
 
 In both tissues, Complex I genes protein expression decreases with Age and Sex differences disappear. For mRNA expression, Age effect is small or missing.
 
-```{r, echo=FALSE, fig.width=10, fig.height=4.5}
+```{r, echo=FALSE, fig.height=4.5, fig.width=10}
 # load data
 kidney = new.env()
 heart = new.env()
@@ -47,12 +47,12 @@ kidney$pca1 <- cbind(kidney$annot.samples,
 kidney$pca1$Age <- factor(kidney$pca1$Age, levels = c(6,12,18))
 p1 <- ggplot(kidney$pca1, aes(x = Age, y = prot_pca1, color = Sex, group=Sex)) +
   geom_jitter(width=0.1) +
-  geom_smooth(method="lm", se=FALSE) +
+  stat_summary(fun.y=mean, geom="line", size=1.2) +
   labs(title = "Protein Expression", subtitle = "Kidney") +
   scale_color_npg()
 p2 <- ggplot(kidney$pca1, aes(x = Age, y = mrna_pca1, color = Sex, group=Sex)) +
   geom_jitter(width=0.1) +
-  geom_smooth(method="lm", se=FALSE) +
+  stat_summary(fun.y=mean, geom="line", size=1.2) +
   labs(title = "mRNA Expression", subtitle = "Kidney") +
   scale_color_npg()
 grid.arrange(p1, p2, ncol = 2)
@@ -68,12 +68,12 @@ heart$pca1 <- cbind(heart$annot.samples,
 heart$pca1$Age <- factor(heart$pca1$Age, levels = c(6,12,18))
 p1 <- ggplot(heart$pca1, aes(x = Age, y = prot_pca1, color = Sex, group=Sex)) +
   geom_jitter(width=0.1) +
-  geom_smooth(method="lm", se=FALSE) +
+  stat_summary(fun.y=mean, geom="line", size=1.2) +
   labs(title = "Protein Expression", subtitle = "Heart") +
   scale_color_npg()
 p2 <- ggplot(heart$pca1, aes(x = Age, y = mrna_pca1, color = Sex, group=Sex)) +
   geom_jitter(width=0.1) +
-  geom_smooth(method="lm", se=FALSE) +
+  stat_summary(fun.y=mean, geom="line", size=1.2) +
   labs(title = "mRNA Expression", subtitle = "Heart") +
   scale_color_npg()
 grid.arrange(p1, p2, ncol = 2)
